@@ -1,5 +1,6 @@
-# System rezerwacji torów na basenach
-Celem projektu jest zaprojektowanie systemu pozwalającego na rezerwację torów na basenie w zależności od poziomu zaawansowania pływaków, z uwzględnieniem aktualnych zaleceń sanitarnych.
+# Vision doc: System rezerwacji torów na basenach
+System stworzony z myślą o wymagających użytkownikach pływalni krytych na terenie Warszawy. Dzięki rezerwacji torów w zależności od poziomu zaawansowania będziesz mógł w sposób efektywny i komfortowy wykorzystać swój czas na basenie. Oczywiście z uwzględnieniem aktualnych zaleceń sanitarnych.
+
 ## Funkcjonalności:
 1. Użytkownicy:
     - wybór basenu w ramach miasta stołecznego Warszawy
