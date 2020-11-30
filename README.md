@@ -11,5 +11,5 @@ Celem projektu jest zaprojektowanie systemu pozwalającego na rezerwację torów
     - rezerwacja całego toru (np. dla szkół / firm / rezerwacji poza systemem / na remont)
     - raport z rezerwacji (obłożenie w zależności od godziny itd.)
 ## Źródła danych:
-Google Maps API / OpenStreetMap API
-infobasen.pl / regionalne serwisy informacyjne
+- Google Maps API / OpenStreetMap API
+- infobasen.pl / regionalne serwisy informacyjne
