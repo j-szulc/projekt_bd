@@ -146,13 +146,6 @@ BEGIN
     END IF;
 END;
 
-
-CREATE TABLE RezerwacjaToru
-(
-    idRezerwacji NUMBER(6) PRIMARY KEY REFERENCES Rezerwacja (id)
-
-);
-
 CREATE TABLE RezerwacjaIndywidualna
 (
     idRezerwacji NUMBER(6) PRIMARY KEY REFERENCES Rezerwacja (id),
