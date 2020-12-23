@@ -8,36 +8,30 @@ CREATE TABLE Basen
     iloscTorow NUMBER(6)            NOT NULL CHECK (iloscTorow > 0)
 );
 
--- TODO Trigger sprawdzający, czy wewnątrz Cennika
-CREATE TABLE GodzinyOtwarcia
+CREATE TABLE CennikIGodzinyOtwarcia
 (
     idBasenu      NUMBER(6) NOT NULL REFERENCES Basen (id),
     dzienTygodnia NUMBER(1) NOT NULL CHECK (dzienTygodnia BETWEEN 1 AND 7),
     otwarteOd     NUMBER(4) NOT NULL CHECK (otwarteOd BETWEEN 0 AND 60 * 24),
     otwarteDo     NUMBER(4) NOT NULL CHECK (otwarteDo BETWEEN 0 AND 60 * 24),
+    cenaIndywidualna NUMBER(6) NOT NULL CHECK (cenaIndywidualna >= 0),
+    cenaGrupowa      NUMBER(6) NOT NULL CHECK (cenaGrupowa >= 0),
     CONSTRAINT otwarciePrzedZamknieciem CHECK (otwarteOd < otwarteDo),
     CONSTRAINT GodzinyOtwarciaPK PRIMARY KEY (idBasenu, dzienTygodnia)
 );
 
--- TODO Trigger sprawdzający, czy przedziały nie nachodzą na siebie
--- TODO Trigger sprawdzający, czy wewnątrz godzin otwarcia
-CREATE TABLE Cennik
-(
-    id               NUMBER(6) PRIMARY KEY,
-    idBasenu         NUMBER(6) NOT NULL REFERENCES Basen (id),
-    dzienTygodnia    NUMBER(1) NOT NULL CHECK (dzienTygodnia BETWEEN 1 AND 7),
-    czasOd           NUMBER(4) NOT NULL CHECK (czasOd BETWEEN 0 AND 60 * 24),
-    czasDo           NUMBER(4) NOT NULL CHECK (czasDo BETWEEN 0 AND 60 * 24),
-    cenaIndywidualna NUMBER(6) NOT NULL CHECK (cenaIndywidualna >= 0),
-    cenaGrupowa      NUMBER(6) NOT NULL CHECK (cenaGrupowa >= 0),
-    CONSTRAINT odPrzedDo CHECK (czasOd < czasDo)
-);
+CREATE OR REPLACE TRIGGER czyNieNachodzaNaSiebie
+    BEFORE INSERT OR UPDATE ON CennikIGodzinyOtwarcia
+    FOR EACH ROW
+    DECLARE
+        ileNachodzi NUMBER;
+    BEGIN
+        SELECT COUNT(*) INTO ileNachodzi FROM CennikIGodzinyOtwarcia WHERE otwarteOd < :NEW.otwarteDo AND otwarteDo > :NEW.otwarteOd;
+        IF ileNachodzi > 0 THEN
+            raise_application_error(-20006, 'Rekordy cennika nachodzą na siebie!');
+        END IF;
+    END;
 
--- Problem - zakleszczenie!
---CREATE TRIGGER czyCennikWewnatrzGodzinOtwarcia
---BEFORE INSERT OR UPDATE OR DELETE ON Cennik
---CREATE TRIGGER czyGodzinyOtwarciaWewnatrzCennika
---BEFORE INSERT OR UPDATE OR DELETE ON GodzinyOtwarcia
 
 CREATE TABLE ObostrzeniaSanitarne
 (
@@ -77,11 +71,25 @@ CREATE TABLE Rezerwacja
     nrToru   NUMBER(6) NOT NULL CHECK (nrToru > 0),
     czasOd   DATE      NOT NULL,
     czasDo   DATE      NOT NULL,
-    liczbaOsob   NUMBER(6) DEFAULT 1 CHECK (liczbaOsob >= 0)
+    liczbaOsob   NUMBER(6) DEFAULT 1 CHECK (liczbaOsob >= 0),
+    czyRezerwacjaCalegoToru NUMBER(1) DEFAULT 0
 );
 
+CREATE OR REPLACE TRIGGER rezerwacjaToruNieKoliduje
+    BEFORE INSERT OR UPDATE ON Rezerwacja
+    FOR EACH ROW
+    DECLARE
+        ileNachodzi NUMBER;
+    BEGIN
+        SELECT COUNT(*) INTO ileNachodzi FROM Rezerwacja WHERE czasOd < :NEW.czasDo AND czasDo > :NEW.czasOd AND nrToru = :NEW.nrToru
+        AND (czyRezerwacjaCalegoToru = 1 OR :NEW.czyRezerwacjaCalegoToru=1);
+        IF ileNachodzi > 0 THEN
+            raise_application_error(-20007, 'Kolizja z rezerwacją całego toru!');
+        END IF;
+END;
+
 CREATE OR REPLACE TRIGGER dobryNrToru
-    BEFORE INSERT ON Rezerwacja
+    BEFORE INSERT OR UPDATE ON Rezerwacja
     FOR EACH ROW
 DECLARE
     ileTorow NUMBER;
@@ -102,8 +110,11 @@ DECLARE
     czasOd    NUMBER;
     czasDo    NUMBER;
 BEGIN
-    SELECT otwarteOd INTO otwarteOd FROM GodzinyOtwarcia WHERE GodzinyOtwarcia.idBasenu = :NEW.idBasenu AND GodzinyOtwarcia.dzienTygodnia = TO_NUMBER(TO_CHAR(:NEW.czasOd, 'D'));
-    SELECT otwarteDo INTO otwarteDo FROM GodzinyOtwarcia WHERE GodzinyOtwarcia.idBasenu = :NEW.idBasenu AND GodzinyOtwarcia.dzienTygodnia = TO_NUMBER(TO_CHAR(:NEW.czasDo, 'D'));
+    IF TO_CHAR(czasOd, 'DD-MM-YYYY') != TO_CHAR(czasDo, 'DD-MM-YYYY') THEN
+        raise_application_error(-20002, 'Rezerwacja nie może obejmować więcej niż jednego dnia!');
+    END IF;
+    SELECT MIN(otwarteOd) INTO otwarteOd FROM CennikIGodzinyOtwarcia WHERE CennikIGodzinyOtwarcia.idBasenu = :NEW.idBasenu AND CennikIGodzinyOtwarcia.dzienTygodnia = TO_NUMBER(TO_CHAR(:NEW.czasOd, 'D'));
+    SELECT MAX(otwarteDo) INTO otwarteDo FROM CennikIGodzinyOtwarcia WHERE CennikIGodzinyOtwarcia.idBasenu = :NEW.idBasenu AND CennikIGodzinyOtwarcia.dzienTygodnia = TO_NUMBER(TO_CHAR(:NEW.czasDo, 'D'));
     czasOd := TO_NUMBER(TO_CHAR(:NEW.czasOd, 'HH24')) * 60 + TO_NUMBER(TO_CHAR(:NEW.czasOd, 'MI'));
     czasDo := TO_NUMBER(TO_CHAR(:NEW.czasOd, 'HH24')) * 60 + TO_NUMBER(TO_CHAR(:NEW.czasOd, 'MI'));
     IF czasOd < otwarteOd THEN
