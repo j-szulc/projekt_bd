@@ -16,9 +16,10 @@ CREATE TABLE CennikIGodzinyOtwarcia
     otwarteDo     NUMBER(4) NOT NULL CHECK (otwarteDo BETWEEN 0 AND 60 * 24),
     cenaIndywidualna NUMBER(6) NOT NULL CHECK (cenaIndywidualna >= 0),
     cenaGrupowa      NUMBER(6) NOT NULL CHECK (cenaGrupowa >= 0),
-    CONSTRAINT otwarciePrzedZamknieciem CHECK (otwarteOd < otwarteDo),
-    CONSTRAINT GodzinyOtwarciaPK PRIMARY KEY (idBasenu, dzienTygodnia)
+    CONSTRAINT otwarciePrzedZamknieciem CHECK (otwarteOd < otwarteDo)
 );
+
+-- Sprawdzanie czy przedziały czasowe są spójne.
 
 CREATE OR REPLACE TRIGGER czyNieNachodzaNaSiebie
     BEFORE INSERT OR UPDATE ON CennikIGodzinyOtwarcia
