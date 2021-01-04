@@ -17,21 +17,30 @@ CREATE TABLE CennikIGodzinyOtwarcia
     cenaIndywidualna NUMBER(6) NOT NULL CHECK (cenaIndywidualna >= 0),
     cenaGrupowa      NUMBER(6) NOT NULL CHECK (cenaGrupowa >= 0),
     CONSTRAINT otwarciePrzedZamknieciem CHECK (otwarteOd < otwarteDo),
-    CONSTRAINT GodzinyOtwarciaPK PRIMARY KEY (idBasenu, dzienTygodnia)
+    CONSTRAINT PK PRIMARY KEY (idBasenu, dzienTygodnia)
+);
+
+CREATE TABLE CennikSpecjalny
+(
+    idBasenu      NUMBER(6) NOT NULL REFERENCES Basen (id),
+    czasOd        DATE NOT NULL,
+    czasDo        DATE NOT NULL,
+    cenaIndywidualna NUMBER(6) CHECK (cenaIndywidualna IS NULL OR cenaIndywidualna >= 0),
+    cenaGrupowa      NUMBER(6) CHECK (cenaGrupowa IS NULL OR cenaGrupowa >= 0),
+    CONSTRAINT poczatekPrzedKoncem CHECK (czasOd < czasDo)
 );
 
 CREATE OR REPLACE TRIGGER czyNieNachodzaNaSiebie
-    BEFORE INSERT OR UPDATE ON CennikIGodzinyOtwarcia
+    BEFORE INSERT OR UPDATE ON CennikSpecjalny
     FOR EACH ROW
-    DECLARE
-        ileNachodzi NUMBER;
-    BEGIN
-        SELECT COUNT(*) INTO ileNachodzi FROM CennikIGodzinyOtwarcia WHERE otwarteOd < :NEW.otwarteDo AND otwarteDo > :NEW.otwarteOd;
-        IF ileNachodzi > 0 THEN
-            raise_application_error(-20006, 'Rekordy cennika nachodzą na siebie!');
-        END IF;
-    END;
-
+DECLARE
+    ileNachodzi NUMBER;
+BEGIN
+    SELECT COUNT(*) INTO ileNachodzi FROM CennikSpecjalny WHERE czasOd < :NEW.czasDo AND czasDo > :NEW.czasOd;
+    IF ileNachodzi > 0 THEN
+        raise_application_error(-20006, 'Rekordy cennika nachodzą na siebie!');
+    END IF;
+END;
 
 CREATE TABLE ObostrzeniaSanitarne
 (
@@ -84,7 +93,7 @@ CREATE OR REPLACE TRIGGER rezerwacjaToruNieKoliduje
         SELECT COUNT(*) INTO ileNachodzi FROM Rezerwacja WHERE czasOd < :NEW.czasDo AND czasDo > :NEW.czasOd AND nrToru = :NEW.nrToru
         AND (czyRezerwacjaCalegoToru = 1 OR :NEW.czyRezerwacjaCalegoToru=1);
         IF ileNachodzi > 0 THEN
-            raise_application_error(-20007, 'Kolizja z rezerwacją całego toru!');
+            raise_application_error(-20009, 'Kolizja z rezerwacją całego toru!');
         END IF;
 END;
 
@@ -126,8 +135,15 @@ BEGIN
     IF MOD(czasOd, 60) != MOD(czasDo, 60) THEN
         raise_application_error(-20005, 'Rezerwacja musi mieć długość będącą wielokrotnością 1h!');
     END IF;
-    IF MOD(czasOd, 60) != MOD(otwarteOd, 60) THEN
-        raise_application_error(-20006, 'Rezerwacja musi zaczynać się o pełnych godzinach od otwarcia');
+    IF MOD(czasOd, 15) != MOD(otwarteOd, 15) THEN
+        raise_application_error(-20006, 'Rezerwacja musi zaczynać się o pełnych kwadransach od otwarcia');
+    END IF;
+    IF :NEW.czyRezerwacjaCalegoToru=0 AND :NEW.czasOd < SYSDATE THEN
+        raise_application_error(-20007, 'Termin rezerwacji indywidualnej na tę godzinę minął');
+    END IF;
+    -- Rezerwacje grupowe muszą zostać zrobione na co najmniej tydzień wcześniej
+    IF :NEW.czyRezerwacjaCalegoToru=1 AND :NEW.czasOd < SYSDATE + 7 THEN
+        raise_application_error(-20007, 'Termin rezerwacji grupowej na tę godzinę minął');
     END IF;
 END;
 
@@ -142,7 +158,7 @@ BEGIN
     SELECT maxLiczbaOsobNaTorze INTO maxLiczbaOsobNaTorze FROM ObostrzeniaSanitarne WHERE idBasenu = :NEW.idBasenu;
     SELECT COUNT(*) INTO ileObecnieNaTorze FROM Rezerwacja WHERE czasDo > :NEW.czasOd AND czasOd < :NEW.czasDo AND idBasenu = :NEW.idBasenu AND nrToru = :NEW.nrToru;
     IF ileObecnieNaTorze + :NEW.liczbaOsob > maxLiczbaOsobNaTorze THEN
-        raise_application_error(-20007, 'Za dużo osób na torze!');
+        raise_application_error(-20008, 'Za dużo osób na torze!');
     END IF;
 END;
 
