@@ -30,6 +30,8 @@ CREATE TABLE CennikSpecjalny
     CONSTRAINT poczatekPrzedKoncem CHECK (czasOd < czasDo)
 );
 
+-- Sprawdzanie czy przedziały czasowe są spójne.
+
 CREATE OR REPLACE TRIGGER czyNieNachodzaNaSiebie
     BEFORE INSERT OR UPDATE ON CennikSpecjalny
     FOR EACH ROW
