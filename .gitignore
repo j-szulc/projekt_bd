@@ -1,0 +1,3 @@
+node_modules"server": "nodemon server.js","dev": "concurrently --kill-others-on-fail \"npm run client\" \"npm run server\""
+package-lock.json
+.env
