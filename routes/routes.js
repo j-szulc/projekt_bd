@@ -3,5 +3,6 @@ const router = express.Router();
 const controllers = require('./../controllers/controllers');
 
 router.get('/say-something', controllers.saySomething);
+router.get('/pools', controllers.pools);
 
 module.exports = router;

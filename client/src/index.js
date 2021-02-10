@@ -3,12 +3,16 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import Login from './Login';
+import Pools from './Pools';
+import Timetable from './Timetable';
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
   <React.StrictMode>
     <App />
     <Login />
+      <Pools />
+      <Timetable />
   </React.StrictMode>,
   document.getElementById('root')
 );

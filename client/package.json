@@ -10,13 +10,16 @@
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-scripts": "4.0.1",
-    "web-vitals": "^0.2.4"
+    "web-vitals": "^0.2.4",
+    "react-bootstrap": "^1.4.3",
+    "sha1": "^1.1.1"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "watch": "cra-build-watch"
   },
   "eslintConfig": {
     "extends": [
@@ -35,6 +38,10 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "cra-build-watch": "^3.4.0",
+    "noop": "^0.2.2"
   },
   "proxy": "http://localhost:5000"
 }
