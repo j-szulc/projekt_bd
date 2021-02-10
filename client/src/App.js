@@ -1,11 +1,19 @@
 import React, { Component } from 'react';
 import './App.css';
+import Login from './Login';
+import Pools from './Pools';
+import Timetable from './Timetable';
 import axios from 'axios'
 
 class App extends Component {
-  state = {
-    response: {}
-  };
+
+  constructor() {
+    super();
+    this.state = {
+      page : "login",
+      response: { body : ""}
+    };
+  }
 
   componentDidMount() {
     axios.get('/api/v1/say-something').then((res) => {
@@ -16,11 +24,25 @@ class App extends Component {
     });
   }
 
+  currentPage(){
+    switch(this.state.page){
+      case "login":
+        return <Login/>;
+        break;
+      default:
+        return
+        <div><Pools/>
+          <Timetable /></div>
+    }
+  }
+
   render() {
     return (
         <div className="App">
           <h1>HELLO from the frontend!</h1>
           <h1>{this.state.response.body}</h1>
+          {this.state.page}
+          {this.currentPage()}
         </div>
     );
   }

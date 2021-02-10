@@ -11,5 +11,12 @@ const pools = (req,res,next) => {
     });
 }
 
+const login = (req,res,next) => {
+    res.status(200).json({
+        success: true
+    });
+}
+
 module.exports.saySomething = saySomething;
 module.exports.pools = pools;
+module.exports.login = login;

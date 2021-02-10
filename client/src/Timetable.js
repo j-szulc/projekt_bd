@@ -4,15 +4,24 @@ import axios from 'axios'
 
 class Timetable extends Component {
 
-    constructor() {
+    constructor(props) {
         super();
+        let now = new Date();
         this.state = {
-            headers: {
-                "01.03.21": {"6:00":, "6:15", "6:30", "6:45", "7:00", "7:15"},
-                "02.03.21": ["6:00", "6:15", "6:30", "6:45", "7:00", "7:15"]
-            },
-            data: [[1, 2, 3, 4, 5, 6,1,3,0,4,5,67], [7, 8, 9, 0, 1, 2,12,64,87,5,1,2]]
-        };
+            time : new Date(now.getFullYear(),now.getMonth(),now.getDate()),
+            headers: ["6:00", "6:15", "6:30", "6:45", "7:00", "7:15"],
+            data: [
+                [1, 2, 3, 4, 5,6],
+                [7,8,9,10,11,12]
+            ],
+            selected: new Proxy({}, {
+                get: (target, name) => name in target ? target[name] : (new Proxy({}, {
+                    get: (target, name) => name in target ? target[name] : false
+                }))
+            }),
+            currentlySelected : 0
+        }
+        this.global = props.global;
     }
 
 
@@ -23,40 +32,79 @@ class Timetable extends Component {
                 });*/
     }
 
-    render() {
+    getClicked(rowIndex, columnIndex, value) {
+        return (this.state.selected[rowIndex])[columnIndex];
+    }
 
-        console.log(Object.keys(this.state.headers).map((day, index) => this.state.headers[day]));
+
+    toggle(rowIndex, columnIndex) {
+        let left = this.getClicked(rowIndex,columnIndex-1);
+        let middle = this.getClicked(rowIndex, columnIndex);
+        let right = this.getClicked(rowIndex,columnIndex+1);
+
+        if(this.state.currentlySelected == 0 || (!middle && (left || right)) || (middle && (!left || !right))) {
+            this.setState((prevState) => {
+                    let copy = Object.assign({}, prevState);
+                    let rowCopy = Object.assign({}, copy.selected[rowIndex]);
+                    rowCopy[columnIndex] = !middle;
+                    copy.selected[rowIndex] = rowCopy;
+                    copy.currentlySelected += !middle ? 1 : -1;
+                    return copy;
+                }
+            );
+        }
+    }
+
+    changeTime(numOfDays){
+        let newDate = (this.state.time.getDate())+numOfDays;
+        console.log(newDate);
+        this.setState((prevState)=>{
+            let copy = Object.assign({},prevState);
+            copy.time.setDate(newDate);
+            return copy;
+        })
+    }
+
+
+    render() {
         return <div>
             <table>
                 <thead>
                     <tr>
-                        {Object.keys(this.state.headers).map((day, index) =>
-                            <td colspan={this.state.headers[day].length}>{day}</td>
-                        )}
+                        <td colSpan="100%">
+                            <center>
+                            <button onClick={((e)=>this.changeTime(-1))}>Prev</button>
+                            {this.state.time.toLocaleDateString("pl-PL")}
+                            <button onClick={((e)=>this.changeTime(1))}>Next</button>
+                            </center>
+                        </td>
                     </tr>
                     <tr>
-                        {Object.keys(this.state.headers).map((day, index) => {
-                                return this.state.headers[day].map((hour) =>
-                                    <td>{hour}</td>
-                                )
-                            }
+                        {this.state.headers.map((hour) =>
+                            <td>{hour}</td>
                         )}
                     </tr>
                 </thead>
                 <tbody>
-                    {this.state.data.map((row) =>
+                    {this.state.data.map((row, rowIndex) =>
                         <tr>
-                            {
-                                row.map((numberOfPeople)=>
-                                    <td>{numberOfPeople}</td>
-                                )
-                            }
+                            {row.map((n, columnIndex) => {
+                                let clicked = this.getClicked(rowIndex, columnIndex);
+                                let color =  clicked ? "green" : "blue";
+                                let style = {
+                                    "background-color": color
+                                };
+                                console.log(this.state.currentlySelected)
+                                return <td style={style} onClick={(e) => this.toggle(rowIndex, columnIndex)}>{n}</td>;
+                            })}
                         </tr>
                     )}
                 </tbody>
             </table>
         </div>;
     }
+
+
 }
 
 export default Timetable;

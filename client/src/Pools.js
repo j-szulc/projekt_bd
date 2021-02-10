@@ -13,7 +13,7 @@ class Pools extends Component {
 
 
     componentDidMount() {
-        axios.get('/api/v1//pools').then((res) => {
+        axios.get('/api/v1/pools').then((res) => {
             const data = res.data;
             this.setState({response: data});
         });

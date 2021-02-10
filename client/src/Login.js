@@ -20,9 +20,9 @@ class Login extends Component {
     }
 
     handleSubmit(event) {
-        console.log("Logging...");
-        console.log(event);
-        axios.post("/login",{
+        event.preventDefault();
+        console.log(this.state);
+        axios.get("/api/v1/login",{
             email: this.state.email,
             password: sha1(this.state.password)
         }).then((response)=>{
@@ -32,13 +32,12 @@ class Login extends Component {
             console.log("Error!");
             console.log(error);
         });
-        event.preventDefault();
     }
 
     render() {
         return (
             <div className="Login">
-                <Form onSubmit={this.handleSubmit}>
+                <Form onSubmit={(e) => this.handleSubmit(e)}>
                     <Form.Group size="lg" controlId="email">
                         <Form.Label>Email</Form.Label>
                         <Form.Control
