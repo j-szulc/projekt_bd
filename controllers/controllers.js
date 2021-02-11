@@ -1,8 +1,22 @@
 const saySomething = (req, res, next) => {
     res.status(200).json({
-        body: 'HELLO FROM HEROKU!',
+        body: 'CYK LECIMY!',
     });
 };
+
+/*
+*  TODO:
+*   * Strona tytułowa:
+*       - login     (-> email, hash_hasłą/ <- token)
+*       - register  (-> email, hash,_hasła, poziom/ <- token)   TOKEN jednoznacznie wyznacza użytkownika
+*/
+
+// Strona tytułowa
+const login = (req,res,next) => {
+    res.status(200).json({
+        success: true
+    });
+}
 
 const pools = (req,res,next) => {
     res.status(200).json({
@@ -11,11 +25,6 @@ const pools = (req,res,next) => {
     });
 }
 
-const login = (req,res,next) => {
-    res.status(200).json({
-        success: true
-    });
-}
 
 const reserve = (req,res,next) => {
     res.status(200).json({
