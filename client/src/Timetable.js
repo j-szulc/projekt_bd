@@ -4,6 +4,18 @@ import axios from 'axios'
 
 class Timetable extends Component {
 
+    emptySelection() {
+        return new Proxy({}, {
+            get: (target, name) => name in target ? target[name] : (new Proxy({}, {
+                get: (target, name) => name in target ? target[name] : false
+            }))
+        });
+    }
+
+    resetSelection() {
+        this.setState({selected: this.emptySelection(), currentlySelected : 0});
+    }
+
     constructor(props) {
         super();
         let now = new Date();
@@ -14,14 +26,11 @@ class Timetable extends Component {
                 [1, 2, 3, 4, 5,6],
                 [7,8,9,10,11,12]
             ],
-            selected: new Proxy({}, {
-                get: (target, name) => name in target ? target[name] : (new Proxy({}, {
-                    get: (target, name) => name in target ? target[name] : false
-                }))
-            }),
+            selected: this.emptySelection(),
             currentlySelected : 0
         }
-        this.global = props.global;
+        this.resetSelection();
+        this.selectedPool = props.selectedPool;
     }
 
 
@@ -63,11 +72,13 @@ class Timetable extends Component {
             copy.time.setDate(newDate);
             return copy;
         })
+        this.resetSelection();
     }
 
 
     render() {
         return <div>
+            <h1> Selected pool: {this.selectedPool} </h1>
             <table>
                 <thead>
                     <tr>
@@ -101,6 +112,7 @@ class Timetable extends Component {
                     )}
                 </tbody>
             </table>
+            <button onClick={(e)=}
         </div>;
     }
 

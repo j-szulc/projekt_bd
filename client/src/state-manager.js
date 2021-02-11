@@ -1,15 +1,15 @@
 
 const rootMessenger = new EventTarget();
 
-const redirect = (target) => {
-    let event = new CustomEvent("redirect",{detail: target});
+const send = (type,payload={}) => {
+    let event = new CustomEvent(type,{detail: payload});
     rootMessenger.dispatchEvent(event);
 }
 
-const listen = (listener) => {
-    rootMessenger.addEventListener("redirect",(e)=>{
-        listener(e.detail)
-    });
+const listen = (type,listener) => {
+    rootMessenger.addEventListener(type,(e)=>listener(e.detail));
 }
 
-export {redirect, listen};
+const changeRootState = (payload) => send("changeState",payload);
+
+export {send,changeRootState, listen};

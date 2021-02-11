@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import './Pools.css';
 import axios from 'axios'
+import {changeRootState} from './state-manager'
 
 class Pools extends Component {
 
@@ -19,6 +20,10 @@ class Pools extends Component {
         });
     }
 
+    selectPool(payload) {
+        changeRootState({page: "timetable", selectedPool: payload});
+    }
+
     render() {
         return <div>
             <table>
@@ -29,8 +34,8 @@ class Pools extends Component {
                         <th>Adres</th>
                     </tr>
                 </thead>
-                {this.state.response.rows.map((row) => {
-                        return <tbody>
+                {this.state.response.rows.map((row, rowIndex) => {
+                        return <tbody onClick={(e)=>this.selectPool(rowIndex)}>
                             <tr>
                                 <td>{row[0]}</td>
                                 <td>{row[1]}</td>

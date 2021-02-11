@@ -12,7 +12,7 @@ class App extends Component {
     super();
     this.state = {
       page : "login",
-      response: { body : ""}
+      response: { body : ""},
     };
   }
 
@@ -26,12 +26,12 @@ class App extends Component {
   }
 
   componentWillMount() {
-    this.redirect = this.redirect.bind(this);
-    listen(this.redirect);
+    this.receiveStateChange = this.receiveStateChange.bind(this);
+    listen("changeState",this.receiveStateChange);
   }
 
-  redirect(page) {
-    this.setState({page: page});
+  receiveStateChange(payload) {
+    this.setState(payload);
   }
 
   currentPage(){
@@ -39,9 +39,14 @@ class App extends Component {
       case "login":
         return <Login/>;
         break;
+      case "pools":
+        return <Pools/>;
+        break;
+      case "timetable":
+        return <Timetable selectedPool={this.state.selectedPool}/>;
+        break;
       default:
-        return <div><Pools/>
-          <Timetable /></div>;
+        return <h1>404</h1>
     }
   }
 
