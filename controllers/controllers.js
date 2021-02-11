@@ -1,4 +1,5 @@
 const db = require('../db');
+const TokenGenerator = require('uuid-token-generator');
 
 const saySomething = (req, res, next) => {
     db.query("SELECT * FROM KONTO",(derr,dres)=> {
@@ -16,7 +17,21 @@ const saySomething = (req, res, next) => {
 */
 
 // Strona tytułowa
+
+var tokenMap = new Map();
+const tokGen = new TokenGenerator();
+
+const login_query = 'SELECT COUNT(mail) FROM konto WHERE mail = $1 AND haszhasla = $2';
 const login = (req,res,next) => {
+    console.log("Mail: " + req.body.email + " haszhasla: " + req.body.password);
+    let vals = [req.body.email, req.body.password];
+    db.query(login_query, vals, (qerr, qres) => {
+        console.log(qres.rowCount)
+    });
+
+    console.log("Your token is:" + tokGen.generate());
+
+    // wysyłać token / error !
     res.status(200).json({
         success: true
     });
