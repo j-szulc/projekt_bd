@@ -17,6 +17,13 @@ const login = (req,res,next) => {
     });
 }
 
+const reserve = (req,res,next) => {
+    res.status(200).json({
+        success: true
+    });
+}
+
 module.exports.saySomething = saySomething;
 module.exports.pools = pools;
 module.exports.login = login;
+module.exports.reserve = reserve;

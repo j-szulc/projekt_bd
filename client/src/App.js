@@ -45,6 +45,9 @@ class App extends Component {
       case "timetable":
         return <Timetable selectedPool={this.state.selectedPool}/>;
         break;
+      case "end":
+        return <div><h1>Reservation successful!</h1><button onClick={(e)=>this.setState({page: "pools"})}>Make another</button></div>;
+        break;
       default:
         return <h1>404</h1>
     }

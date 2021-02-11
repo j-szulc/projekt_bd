@@ -23,7 +23,7 @@ class Login extends Component {
     handleSubmit(event) {
         event.preventDefault();
         console.log(this.state);
-        axios.get("/api/v1/login",{
+        axios.post("/api/v1/login",{
             email: this.state.email,
             password: sha1(this.state.password)
         }).then((response)=>{
