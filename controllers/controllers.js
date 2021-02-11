@@ -1,6 +1,6 @@
 const saySomething = (req, res, next) => {
     res.status(200).json({
-        body: 'Hello from the server!',
+        body: 'Hello from Heroku!',
     });
 };
 
