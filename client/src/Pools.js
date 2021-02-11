@@ -27,7 +27,7 @@ class Pools extends Component {
     }
 
     render() {
-        return <div>
+        return <div className="pools">
             <Table bordered>
                 <thead>
                     <tr>
