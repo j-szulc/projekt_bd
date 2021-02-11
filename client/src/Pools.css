@@ -1,0 +1,28 @@
+@media all and (min-width: 480px) {
+    .pools{
+        max-width: 60%;
+        padding: 10px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .poolsTable{
+        table-layout: fixed
+    }
+
+    .poolsRow:hover{
+        cursor: pointer;
+        background-color: rgba(0, 115, 225,0.5);
+    }
+
+    .id{
+    }
+    
+    .name{
+        width: 48%;
+    }
+    
+    .address{
+        width: 48%;
+    }
+}
