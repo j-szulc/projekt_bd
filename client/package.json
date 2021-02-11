@@ -20,7 +20,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "watch": "cra-build-watch"
+    "watch": "cra-build-watch",
+    "peek": "cra-build-watch --after-initial-build-hook \"kill $PPID\""
   },
   "eslintConfig": {
     "extends": [
