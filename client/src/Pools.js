@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import './Pools.css';
 import axios from 'axios'
 import {changeRootState} from './state-manager'
+import Table from 'react-bootstrap/Table'
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 class Pools extends Component {
 
@@ -26,7 +28,7 @@ class Pools extends Component {
 
     render() {
         return <div>
-            <table>
+            <Table bordered>
                 <thead>
                     <tr>
                         <th>Id</th>
@@ -44,7 +46,7 @@ class Pools extends Component {
                         </tbody>;
                     }
                 )}
-            </table>
+            </Table>
         </div>;
     }
 }

@@ -3,6 +3,8 @@ import './Timetable.css';
 import axios from 'axios'
 import {isDefined} from './helpers'
 import {changeRootState} from './state-manager'
+import Table from 'react-bootstrap/Table'
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 class Timetable extends Component {
 
@@ -112,7 +114,7 @@ class Timetable extends Component {
     render() {
         return <div>
             <h1>Selected pool: {this.selectedPool} </h1>
-            <table>
+            <Table bordered size="sm">
                 <thead>
                     <tr>
                         <td colSpan="100%">
@@ -143,7 +145,7 @@ class Timetable extends Component {
                         </tr>
                     )}
                 </tbody>
-            </table>
+            </Table>
             <button onClick={(e)=>this.makeReservation()}>Reserve</button>
         </div>;
     }
