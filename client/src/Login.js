@@ -4,6 +4,7 @@ import Button from "react-bootstrap/Button";
 import './Login.css';
 import axios from 'axios'
 import sha1 from 'sha1'
+import {cookies} from './cookie-manager'
 import {changeRootState} from './state-manager'
 
 class Login extends Component {
@@ -28,6 +29,7 @@ class Login extends Component {
             password: sha1(this.state.password)
         }).then((response)=>{
             console.log("Success!");
+            cookies.set('token', '123456789', { path: '/' });
             changeRootState({page: "pools"});
             console.log(response);
         }).catch(function (error) {
