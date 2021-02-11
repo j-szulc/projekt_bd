@@ -20,7 +20,7 @@
     "build": "npm run install-changed && react-scripts build",
     "build-dev": "npm run install-changed && dotenv -e .env.development react-scripts build",
     "watch": "npm run install-changed && cra-build-watch",
-    "install-changed": "install-changed"
+    "install-changed": "npm install install-changed && install-changed"
   },
   "eslintConfig": {
     "extends": [
