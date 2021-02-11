@@ -8,7 +8,7 @@
     "client:build-dev": "cd client && npm run build-dev",
     "client:install": "cd client && npm install-changed",
     "heroku-prebuild": "npm run client:build",
-    "start" : "node --inspect-brk server.js"
+    "start" : "node --inspect server.js"
   },
   "repository": {
     "type": "git",
