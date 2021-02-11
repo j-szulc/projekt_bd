@@ -3,6 +3,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const path = require('path');
+const { Client } = require('pg');
 
 // Create a new express application named 'app'
 const app = express();
@@ -15,6 +16,27 @@ app.use((req, res, next) => {
     console.log(`Request_Endpoint: ${req.method} ${req.url}`);
     next();
 });
+
+
+const client = new Client({
+    connectionString: process.env.DATABASE_URL,
+    ssl: {
+        rejectUnauthorized: false
+    }
+});
+
+client.connect();
+
+client.query('SELECT * FROM konto;', (err, res) => {
+    if (err) throw err;
+    for (let row of res.rows) {
+        console.log(JSON.stringify(row));
+    }
+    client.end();
+});
+
+console.log(client);
+
 
 // Configure the bodyParser middleware
 app.use(bodyParser.json());
