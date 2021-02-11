@@ -8,20 +8,19 @@
     "@testing-library/user-event": "^12.1.10",
     "axios": "^0.21.1",
     "react": "^17.0.1",
+    "react-bootstrap": "^1.4.3",
     "react-dom": "^17.0.1",
     "react-scripts": "4.0.1",
-    "web-vitals": "^0.2.4",
-    "react-bootstrap": "^1.4.3",
     "sha1": "^1.1.1",
-    "universal-cookie": "^4.0.4"
+    "universal-cookie": "^4.0.4",
+    "web-vitals": "^0.2.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "watch": "cra-build-watch",
-    "peek": "cra-build-watch --after-initial-build-hook \"kill $PPID\""
+    "start": "npm run install-changed && react-scripts start",
+    "build": "npm run install-changed && react-scripts build",
+    "build-dev": "npm run install-changed && dotenv -e .env.development react-scripts build",
+    "watch": "npm run install-changed && cra-build-watch",
+    "install-changed": "install-changed"
   },
   "eslintConfig": {
     "extends": [
@@ -43,6 +42,8 @@
   },
   "devDependencies": {
     "cra-build-watch": "^3.4.0",
+    "dotenv-cli": "^4.0.0",
+    "install-changed": "^1.1.0",
     "noop": "^0.2.2"
   },
   "proxy": "http://localhost:5000"
