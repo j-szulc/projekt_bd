@@ -1,8 +1,26 @@
+const db = require('../db');
+
 const saySomething = (req, res, next) => {
-    res.status(200).json({
-        body: 'HELLO FROM HEROKU!',
+    db.query("SELECT * FROM KONTO",(derr,dres)=> {
+        res.status(200).json({
+            body: dres.rows[0].mail
+        });
     });
 };
+
+/*
+*  TODO:
+*   * Strona tytułowa:
+*       - login     (-> email, hash_hasłą/ <- token)
+*       - register  (-> email, hash,_hasła, poziom/ <- token)   TOKEN jednoznacznie wyznacza użytkownika
+*/
+
+// Strona tytułowa
+const login = (req,res,next) => {
+    res.status(200).json({
+        success: true
+    });
+}
 
 const pools = (req,res,next) => {
     res.status(200).json({
@@ -11,11 +29,6 @@ const pools = (req,res,next) => {
     });
 }
 
-const login = (req,res,next) => {
-    res.status(200).json({
-        success: true
-    });
-}
 
 const reserve = (req,res,next) => {
     res.status(200).json({
