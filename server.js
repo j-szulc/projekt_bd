@@ -3,7 +3,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const path = require('path');
-const { Client } = require('pg');
+const db = require('./db');
 
 // Create a new express application named 'app'
 const app = express();
@@ -16,27 +16,6 @@ app.use((req, res, next) => {
     console.log(`Request_Endpoint: ${req.method} ${req.url}`);
     next();
 });
-
-const connectionString = "postgres://mxglhcboagvgvj:b9f2e8bea188f251f3e7e8cceed8de634d54242262b8da4ab72b53751ef9b3c3@ec2-54-247-158-179.eu-west-1.compute.amazonaws.com:5432/decevmqg3i24kn"
-const client = new Client({
-    connectionString: connectionString,
-    //connectionString: process.env.DATABASE_URL,
-    ssl: {
-        rejectUnauthorized: false
-    }
-});
-
-client.connect().then(()=> {
-
-    client.query('SELECT * FROM konto;').then( (res) => {
-        for (let row of res.rows) {
-            console.log(JSON.stringify(row));
-        }
-    }).catch(
-        (err)=>console.log(err)
-    );
-});
-
 
 // Configure the bodyParser middleware
 app.use(bodyParser.json());
@@ -68,5 +47,10 @@ app.get('*', (req, res) => {
     });
 });
 
-// Configure our server to listen on the port defiend by our port variable
-app.listen(port, () => console.log(`BACK_END_SERVICE_PORT: ${port}`));
+db.connect().then(()=> {
+    db.query("SELECT * FROM KONTO",(err,res)=>{
+        console.log("dupa");
+    });
+    // Configure our server to listen on the port defiend by our port variable
+    app.listen(port, () => console.log(`BACK_END_SERVICE_PORT: ${port}`));
+}).catch(()=>{});

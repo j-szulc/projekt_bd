@@ -1,6 +1,10 @@
+const db = require('../db');
+
 const saySomething = (req, res, next) => {
-    res.status(200).json({
-        body: 'CYK LECIMY!',
+    db.query("SELECT * FROM KONTO",(derr,dres)=> {
+        res.status(200).json({
+            body: dres.rows[0].mail
+        });
     });
 };
 
