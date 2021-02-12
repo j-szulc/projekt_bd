@@ -18,22 +18,27 @@ const saySomething = (req, res, next) => {
 
 // Strona tytułowa
 
-var tokenMap = new Map();
+var tokMap = new Map();
 const tokGen = new TokenGenerator();
 
 const login_query = 'SELECT COUNT(mail) FROM konto WHERE mail = $1 AND haszhasla = $2';
 const login = (req,res,next) => {
-    console.log("Mail: " + req.body.email + " haszhasla: " + req.body.password);
-    let vals = [req.body.email, req.body.password];
+    let mail = req.body.email;
+    let password = req.body.password;
+    let vals = [mail, password];
     db.query(login_query, vals, (qerr, qres) => {
-        console.log(qres.rowCount)
-    });
-
-    console.log("Your token is:" + tokGen.generate());
-
-    // wysyłać token / error !
-    res.status(200).json({
-        success: true
+        let exists = qres.rowCount > 0;
+        if(exists) {
+            let tok = tokGen.generate();
+            tokMap.set(mail, tok);
+            res.status(200).json({
+                token: tok
+            });
+        } else {
+            res.status(400).json({
+                msg: "Podałeś niepoprawne dane logowania!"
+            })
+        }
     });
 }
 
