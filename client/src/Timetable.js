@@ -23,12 +23,14 @@ class Timetable extends Component {
         let now = new Date();
         this.state = {
             time: new Date(now.getFullYear(), now.getMonth(), now.getDate()),
-            headers: ["6:00", "6:15", "6:30", "6:45", "7:00", "7:15", "6:00", "6:15", "6:30", "6:45", "7:00", "7:15", "6:00", "6:15", "6:30", "6:45", "7:00", "7:15", "6:00", "6:15", "6:30", "6:45", "7:00", "7:15", "6:00", "6:15", "6:30", "6:45", "7:00", "7:15", "6:00", "6:15", "6:30", "6:45", "7:00", "7:15", "6:00", "6:15", "6:30", "6:45", "7:00", "7:15", "6:00", "6:15", "6:30", "6:45", "7:00", "7:15", "6:00", "6:15", "6:30", "6:45", "7:00", "7:15", "6:00", "6:15", "6:30", "6:45", "7:00", "7:15"],
+            headers: [],
+            //headers: ["6:00", "6:15", "6:30", "6:45", "7:00", "7:15", "6:00", "6:15", "6:30", "6:45", "7:00", "7:15", "6:00", "6:15", "6:30", "6:45", "7:00", "7:15", "6:00", "6:15", "6:30", "6:45", "7:00", "7:15", "6:00", "6:15", "6:30", "6:45", "7:00", "7:15", "6:00", "6:15", "6:30", "6:45", "7:00", "7:15", "6:00", "6:15", "6:30", "6:45", "7:00", "7:15", "6:00", "6:15", "6:30", "6:45", "7:00", "7:15", "6:00", "6:15", "6:30", "6:45", "7:00", "7:15", "6:00", "6:15", "6:30", "6:45", "7:00", "7:15"],
             //headers: ["6:00", "6:15", "6:30", "6:45", "7:00", "7:15"],
-            data: [
-                [1, 2, 3, 4, 5, 6],
-                [7, 8, 9, 10, 11, 12]
-            ],
+            //data: [
+              //  [1, 2, 3, 4, 5, 6],
+               // [7, 8, 9, 10, 11, 12]
+            //],
+            data: [],
             selectedRow: undefined,
             selectedColumnStart: undefined,
             selectedColumnStop: undefined
@@ -37,11 +39,21 @@ class Timetable extends Component {
     }
 
 
-    componentDidMount() {
-        axios.get('/api/v1//pools').then((res) => {
+    request() {
+        console.log("Sending request");
+        axios.get('/api/v1/timetable',{
+            params: {
+                date: this.state.time
+            }
+        }).then((res) => {
             const data = res.data;
-            this.setState(data);
+            console.log(data);
+            //this.setState(data);
         });
+    }
+
+    componentDidMount() {
+        this.request();
     }
 
     getClicked(rowIndex, columnIndex) {
@@ -111,6 +123,7 @@ class Timetable extends Component {
             return copy;
         })
         this.resetSelection();
+        this.request();
     }
 
 
