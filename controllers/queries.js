@@ -17,8 +17,9 @@ class Queries {
     }
 
     static async registerUser(vals) {
-        let res = await db.query('INSERT INTO konto(mail, imie, nazwisko, nrtelefonu, haszhasla) VALUES($1, $2, $3, $4, $5) RETURNING id', vals);
-        return res;
+        let res = await db.query('INSERT INTO konto(mail, id, imie, nazwisko, nrtelefonu, haszhasla, poziomzaawansowania)' +
+            ' VALUES($1, DEFAULT, $2, $3, $4, $5, $6) RETURNING id', vals);
+        return res.rows[0].id;
     }
 }
 

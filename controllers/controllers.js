@@ -21,8 +21,6 @@ const saySomething = (req, res, next) => {
 
 var tokMap = new Map();
 const tokGen = new TokenGenerator();
-
-const login_query = 'SELECT COUNT(mail) FROM konto WHERE mail = $1 AND haszhasla = $2';
 const login = (req,res,next) => {
     let mail = req.body.email;
     let password = req.body.password;
@@ -47,6 +45,8 @@ const login = (req,res,next) => {
 
 const register = (req, res, next) => {
     let mail = req.body.email;
+    let name = req.body.name;
+    let surname = req.body.surname;
     let password = req.body.password;
     let phone = req.body.tel;
     let lvl = req.body.level;
@@ -59,11 +59,17 @@ const register = (req, res, next) => {
             console.log("Już istnieje");
         } else {
             console.log("No to rejestrujemy");
-            let vals =
+            let vals = [mail, name, surname, phone, password, lvl];
             let tok = tokGen.generate();
             tokMap.set(mail, tok);
-            db.query('')
-        }
+            Queries.registerUser(vals).then(id => {
+                console.log(id);
+                res.status(200).json({
+                    tok: tok,
+                    msg: "Konto pomyślnie zarejestrowane"
+                })
+            });
+       }
     })
 }
 
