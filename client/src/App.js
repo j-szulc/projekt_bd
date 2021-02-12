@@ -4,7 +4,7 @@ import './App.css';
 import Login from './Login';
 import Pools from './Pools';
 import Timetable from './Timetable';
-import Reservations from './Reservations';
+import Dashboard from './Dashboard';
 import {listen} from './state-manager'
 import {cookies} from './cookie-manager'
 import {isDefined} from './helpers'
@@ -33,6 +33,8 @@ class App extends Component {
     componentWillMount() {
         this.receiveStateChange = this.receiveStateChange.bind(this);
         listen("changeState", this.receiveStateChange);
+        this.logout = this.logout.bind(this);
+        listen("logout", this.logout);
     }
 
     receiveStateChange(payload) {
@@ -52,13 +54,13 @@ class App extends Component {
             case "timetable":
                 return <Timetable selectedPool={this.state.selectedPool}/>;
                 break;
-            case "reservations":
-                return <Reservations/>;
+            case "dashboard":
+                return <Dashboard/>;
                 break;
             case "end":
                 return <div>
                     <h1>Reservation successful!</h1>
-                    <button onClick={(e) => this.receiveStateChange({page: "pools"})}>Make another</button>
+                    <button onClick={(e) => this.receiveStateChange({page: "dashboard"})}>Dashboard</button>
                 </div>;
                 break;
             default:
@@ -66,7 +68,7 @@ class App extends Component {
         }
     }
 
-    logout() {
+    logout(payload={}) {
         cookies.remove('token');
         this.receiveStateChange({});
     }
@@ -77,7 +79,7 @@ class App extends Component {
                 <h1>HELLO from the frontend!</h1>
                 <button onClick={(e) => this.logout()}>Logout</button>
                 <button onClick={(e) => this.receiveStateChange({page: "pools"})}>Make a reservation</button>
-                <button onClick={(e) => this.receiveStateChange({page: "reservations"})}>List reservations</button>
+                <button onClick={(e) => this.receiveStateChange({page: "dashboard"})}>List reservations</button>
                 <h1>{this.state.response.body}</h1>
                 {this.state.page}
                 {this.currentPage()}

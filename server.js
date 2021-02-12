@@ -48,9 +48,6 @@ app.get('*', (req, res) => {
 });
 
 db.connect().then(()=> {
-    db.query("SELECT * FROM KONTO",(err,res)=>{
-        console.log("dupa");
-    });
     // Configure our server to listen on the port defiend by our port variable
     app.listen(port, () => console.log(`BACK_END_SERVICE_PORT: ${port}`));
 }).catch(()=>{});
