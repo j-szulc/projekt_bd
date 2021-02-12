@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import './Pools.css';
+import './Login.css';
 import axios from 'axios'
 import {changeRootState} from './state-manager'
 import Table from 'react-bootstrap/Table'
@@ -11,6 +12,7 @@ class Pools extends Component {
         super();
         this.state = {
             rows:[],
+            errorMsg: ""
         };
     }
 
@@ -20,6 +22,8 @@ class Pools extends Component {
             const data = res.data;
             console.log(data);
             this.setState({rows: data});
+        }).catch((err) => {
+            this.setState({errorMsg:"Error downloading pool data: \n"+err});
         });
     }
 
@@ -29,6 +33,7 @@ class Pools extends Component {
 
     render() {
         return <div className="pools">
+            <div className="error">{this.state.errorMsg}</div>
             <Table bordered className="poolsTable">
                 <thead>
                     <tr>
@@ -37,6 +42,7 @@ class Pools extends Component {
                         <th className="address">Adres</th>
                     </tr>
                 </thead>
+                {this.state.errorMsg}
                 {this.state.rows.map((row, rowIndex) => {
                         return <tbody>
                             <tr className="poolsRow" onClick={(e)=>this.selectPool(rowIndex)}>

@@ -115,17 +115,25 @@ class Timetable extends Component {
 
 
     render() {
-        return <div class="zero">
+        return <div className="zero">
             <h1>Selected pool: {this.selectedPool} </h1>
-            <div class="flipper zero">
-            <div class="div zero">
-                <div class="flipper zero inline">
-                <Table bordered size="sm" class="timetable table-responsive zero inline">
+            <div className="flipper zero">
+            <div className="div zero">
+                <div className="flipper zero inline">
+                <Table bordered size="sm" className="timetable table-responsive zero inline">
                     <thead>
-
+                        <tr>
+                            <td colSpan="100%">
+                                <center>
+                                    <Prev onClick={((e) => this.changeTime(-1))}>Prev</Prev>
+                                    {this.state.time.toLocaleDateString("pl-PL")}
+                                    <Next onClick={((e) => this.changeTime(1))}>Next</Next>
+                                </center>
+                            </td>
+                        </tr>
                         <tr>
                             {this.state.headers.map((hour) =>
-                                <td class="header">{hour}</td>
+                                <td className="header">{hour}</td>
                             )}
                         </tr>
                     </thead>
@@ -134,7 +142,7 @@ class Timetable extends Component {
                             <tr>
                                 {row.map((n, columnIndex) => {
                                     let clicked = this.getClicked(rowIndex, columnIndex);
-                                    return <td class={(clicked ? "selected" : "free") + " data"}
+                                    return <td className={(clicked ? "selected" : "free") + " data"}
                                                onClick={(e) => this.toggle(rowIndex, columnIndex)}>{n}</td>;
                                 })}
                             </tr>

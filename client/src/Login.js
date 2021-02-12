@@ -67,6 +67,8 @@ class Login extends Component {
     }
 
     handleRegister(event) {
+        const errorFun = this.error.bind(this);
+
         event.preventDefault();
         axios.post("/api/v1/register", {
             email: this.state.email,
@@ -81,7 +83,7 @@ class Login extends Component {
         }).catch((error) => {
             console.log("Error!");
             console.log(error);
-            this.error();
+            errorFun();
         });
     }
 
@@ -148,8 +150,8 @@ class Login extends Component {
                                 <Form.Control as="select" defaultValue="Wybierz"
                                               onChange={(e) => this.setState({level: e.target.value})}>
                                     <option>Wybierz</option>
-                                    <option>początkujący</option>
-                                    <option>średniozaawansowany</option>
+                                    <option>poczatkujacy</option>
+                                    <option>sredniozaawansowany</option>
                                     <option>zaawansowany</option>
                                 </Form.Control>
                             </Form.Group>

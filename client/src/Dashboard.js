@@ -1,49 +1,66 @@
 import React, {Component} from 'react';
 import './Dashboard.css';
+import './Login.css'
 import axios from 'axios'
 import {changeRootState, send} from './state-manager'
 import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button'
 import 'bootstrap/dist/css/bootstrap.min.css';
+import {isDefined} from './helpers'
 
 class Dashboard extends Component {
 
     constructor() {
         super();
         this.state = {
-            response: {rows: []},
+            waitForServer: true,
+            rows: [],
+            errorMsg: ""
         };
     }
 
 
     componentDidMount() {
-        // axios.get('/api/v1/list').then((res) => {
-        //     const data = res.data;
-        //     this.setState({response: data});
-        // });
+        axios.get('/api/v1/list').then((res) => {
+             const data = res.data;
+             console.log(data);
+             //this.setState({rows:data});
+        }).catch((err) => {
+            this.setState({errorMsg:"Error downloading reservation data: \n"+err});
+        });
     }
 
     render() {
         return <div className="dashboard">
-
+            <div className="error">{this.state.errorMsg}</div>
             <Table bordered className="dashboardTable">
                 <thead>
                     <tr>
                         <th className="id">Id</th>
-                        <th className="name">Nazwa</th>
+                        <th className="name=">Nazwa</th>
                         <th className="address">Adres</th>
+                        <th className="date">Data</th>
+                        <th className="from">Od</th>
+                        <th className="to">Do</th>
                     </tr>
                 </thead>
-                {this.state.response.rows.map((row, rowIndex) => {
+                {this.state.waitForServer ?
+                    <tbody><tr><th colspan="100%">Proszę czekać</th></tr></tbody>
+                    : (this.state.rows.length>0 ?
+                    <tbody><tr><th colspan="100%">Nie masz żadnych rezerwacji</th></tr></tbody>
+:
+                    this.state.rows.map((row, rowIndex) => {
                         return <tbody>
                             <tr className="poolsRow" onClick={(e)=>this.selectPool(rowIndex)}>
-                                <td className="id">{row[0]}</td>
-                                <td className="name"> {row[1]}</td>
-                                <td className="address">{row[2]}</td>
+                                <td className="id">{row.id}</td>
+                                <td className="name"> {row.name}</td>
+                                <td className="address">{row.address}</td>
+                                <td className="from">{row.from}</td>
+                                <td className="to">{row.to}</td>
                             </tr>
                         </tbody>;
-                    }
-                )}
+                    }))
+                }
             </Table>
             <div className="buttons">
             <Button className="newButton" onClick={(e)=>changeRootState({page: "pools"})}>New reservation</Button>
