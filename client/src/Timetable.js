@@ -79,6 +79,10 @@ class Timetable extends Component {
         });
     }
 
+    valid() {
+        return isDefined(this.state.selectedRow) && isDefined(this.state.selectedColumnStart) && isDefined(this.state.selectedColumnStop);
+    }
+
 
     toggle(rowIndex, columnIndex) {
         let left = this.getClicked(rowIndex, columnIndex - 1);
@@ -161,7 +165,7 @@ class Timetable extends Component {
             </div>
                 </div>
                 </div>
-            <Button onClick={(e) => this.makeReservation()}>Reserve</Button>
+            <Button onClick={(e) => this.makeReservation()} disabled={!this.valid()}>Reserve</Button>
         </div>
     }
 
