@@ -21,7 +21,7 @@ class Login extends Component {
             password: "",
             tel: "",
             level: "",
-            errorMsg: ""
+            errorMsg: "⠀"
         };
     }
 
@@ -38,7 +38,7 @@ class Login extends Component {
     }
 
     resetError(){
-        this.setState({errorMsg:""});
+        this.setState({errorMsg:"⠀"});
     }
 
     componentWillMount(){
@@ -114,6 +114,7 @@ class Login extends Component {
                             <Button variant="primary" type="submit" disabled={!this.validateLogin()}>
                                 Login
                             </Button>
+                            <div className="error">⠀</div>
                         </Form>
                     </Tab>
                     <Tab eventKey="Register" title="Register" onClick={this.resetError}>
@@ -158,6 +159,7 @@ class Login extends Component {
                             <Button variant="primary" type="submit" disabled={!this.validateRegister()}>
                                 Register
                             </Button>
+                            <div className="error">⠀</div>
                         </Form>
                     </Tab>
                 </Tabs>
