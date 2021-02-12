@@ -1,3 +1,4 @@
+const Queries = require('./queries');
 const db = require('../db');
 const TokenGenerator = require('uuid-token-generator');
 
@@ -26,9 +27,7 @@ const login = (req,res,next) => {
     let mail = req.body.email;
     let password = req.body.password;
     let vals = [mail, password];
-    db.query(login_query, vals, (qerr, qres) => {
-        let exists = qres.rows[0].count > 0;
-        console.log(exists);
+    Queries.loginAuth(vals).then(exists => {
         if(exists) {
             let tok = tokGen.generate();
             tokMap.set(mail, tok);
@@ -43,12 +42,35 @@ const login = (req,res,next) => {
             console.log("Authorization failed");
         }
     });
+
 }
 
-const pools_query = 'SELECT * FROM basen';
+const register = (req, res, next) => {
+    let mail = req.body.email;
+    let password = req.body.password;
+    let phone = req.body.tel;
+    let lvl = req.body.level;
+
+    Queries.isRegistered([mail]).then(registered => {
+        if (registered) {
+            res.status(400).json({
+                msg: "Konto o podanym mailu już istnieje!"
+            })
+            console.log("Już istnieje");
+        } else {
+            console.log("No to rejestrujemy");
+            let vals =
+            let tok = tokGen.generate();
+            tokMap.set(mail, tok);
+            db.query('')
+        }
+    })
+}
+
+// Dashboard
 const pools = (req,res,next) => {
-    db.query(pools_query, (qerr, qres) => {
-        res.status(200).json(qres.rows);
+    Queries.getPools().then(rows => {
+        res.status(200).json(rows);
     })
 }
 
@@ -61,5 +83,6 @@ const reserve = (req,res,next) => {
 
 module.exports.saySomething = saySomething;
 module.exports.pools = pools;
+module.exports.register = register;
 module.exports.login = login;
 module.exports.reserve = reserve;
