@@ -25,6 +25,12 @@
         padding-bottom: 0;
     }
 
+    .date{
+        margin-left: auto;
+        margin-right: auto;
+        display: inline-block;
+    }
+
     .inline{
         display: inline-block;
     }
@@ -39,5 +45,15 @@
 
     .selected{
         background-color: rgb(207, 214, 31)
+    }
+
+    .leftButton{
+        margin-right: 10px;
+        width: 100px;
+    }
+
+    .rightButton{
+        margin-left: 10px;
+        width: 100px;
     }
 }

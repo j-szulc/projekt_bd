@@ -133,10 +133,13 @@ class Timetable extends Component {
 
     render() {
         return <div className="zero">
+            <center>
             <h1>Selected pool: {this.selectedPool} </h1>
             <center>
                 <Prev onClick={((e) => this.changeTime(-1))}>Prev</Prev>
+                <div className="date">
                 {this.state.time.toLocaleDateString("pl-PL")}
+                </div>
                 <Next onClick={((e) => this.changeTime(1))}>Next</Next>
             </center>
             <div className="flipper zero">
@@ -165,7 +168,9 @@ class Timetable extends Component {
             </div>
                 </div>
                 </div>
-            <Button onClick={(e) => this.makeReservation()} disabled={!this.valid()}>Reserve</Button>
+            <Button onClick={(e) => changeRootState({page: "dashboard"})} className="leftButton">Dashboard</Button>
+            <Button onClick={(e) => this.makeReservation()} disabled={!this.valid()} className="rightButton">Reserve</Button>
+                </center>
         </div>
     }
 
