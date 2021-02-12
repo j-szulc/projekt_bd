@@ -117,20 +117,16 @@ class Timetable extends Component {
     render() {
         return <div className="zero">
             <h1>Selected pool: {this.selectedPool} </h1>
+            <center>
+                <Prev onClick={((e) => this.changeTime(-1))}>Prev</Prev>
+                {this.state.time.toLocaleDateString("pl-PL")}
+                <Next onClick={((e) => this.changeTime(1))}>Next</Next>
+            </center>
             <div className="flipper zero">
-            <div className="div zero">
-                <div className="flipper zero inline">
+                <div className="div zero">
+                    <div className="flipper zero inline">
                 <Table bordered size="sm" className="timetable table-responsive zero inline">
                     <thead>
-                        <tr>
-                            <td colSpan="100%">
-                                <center>
-                                    <Prev onClick={((e) => this.changeTime(-1))}>Prev</Prev>
-                                    {this.state.time.toLocaleDateString("pl-PL")}
-                                    <Next onClick={((e) => this.changeTime(1))}>Next</Next>
-                                </center>
-                            </td>
-                        </tr>
                         <tr>
                             {this.state.headers.map((hour) =>
                                 <td className="header">{hour}</td>
