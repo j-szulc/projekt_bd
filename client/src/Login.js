@@ -72,6 +72,8 @@ class Login extends Component {
         event.preventDefault();
         axios.post("/api/v1/register", {
             email: this.state.email,
+            name: this.state.name,
+            surname: this.state.surname,
             password: sha1(this.state.password),
             tel: this.state.tel,
             level: this.state.level
@@ -127,6 +129,24 @@ class Login extends Component {
                                     type="email"
                                     value={this.email}
                                     onChange={(e) => this.setState({email: e.target.value})}
+                                />
+                            </Form.Group>
+                            <Form.Group size="lg" controlId="name">
+                                <Form.Label>Imię</Form.Label>
+                                <Form.Control
+                                    autoFocus
+                                    type="text"
+                                    value={this.state.name}
+                                    onChange={(e) => this.setState({name: e.target.value})}
+                                />
+                            </Form.Group>
+                            <Form.Group size="lg" controlId="surname">
+                                <Form.Label>Nazwisko</Form.Label>
+                                <Form.Control
+                                    autoFocus
+                                    type="text"
+                                    value={this.state.surname}
+                                    onChange={(e) => this.setState({surname: e.target.value})}
                                 />
                             </Form.Group>
                             <Form.Group size="lg" controlId="password">
