@@ -45,11 +45,11 @@ const login = (req,res,next) => {
     });
 }
 
+const pools_query = 'SELECT * FROM basen';
 const pools = (req,res,next) => {
-    res.status(200).json({
-        rows: [[2, 'morsowanie nad Bałtykiem', 'Bałtycka 69'],
-        [3,'morsowanie na mokotowskim','Pole Mokotowskie 42']]
-    });
+    db.query(pools_query, (qerr, qres) => {
+        res.status(200).json(qres.rows);
+    })
 }
 
 
