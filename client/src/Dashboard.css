@@ -5,20 +5,26 @@
         margin-left: auto;
         margin-right: auto;
         display: flex;
+        flex-direction: row;
+        align-items:flex-start;
+        display: -moz-flex;
+        display: -webkit-flex;
+        display: -ms-flex;
     }
 
     .dashboardTable{
+        clear:both;
+
     }
 
     .id{
+        width:fit-content;
     }
     
     .name{
-        width: 48%;
     }
     
     .address{
-        width: 48%;
     }
 
     .newButton{
@@ -31,5 +37,7 @@
         flex-direction:column;
         margin-left: 5%;
         width:200px;
+        clear:both;
+
     }
 }
