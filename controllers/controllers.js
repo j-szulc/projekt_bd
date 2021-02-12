@@ -27,17 +27,20 @@ const login = (req,res,next) => {
     let password = req.body.password;
     let vals = [mail, password];
     db.query(login_query, vals, (qerr, qres) => {
-        let exists = qres.rowCount > 0;
+        let exists = qres.rows[0].count > 0;
+        console.log(exists);
         if(exists) {
             let tok = tokGen.generate();
             tokMap.set(mail, tok);
             res.status(200).json({
                 token: tok
             });
+            console.log("Token send");
         } else {
             res.status(400).json({
                 msg: "Podałeś niepoprawne dane logowania!"
             })
+            console.log("Authorization failed");
         }
     });
 }
