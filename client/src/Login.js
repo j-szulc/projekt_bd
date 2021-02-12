@@ -171,8 +171,8 @@ class Login extends Component {
                                 <Form.Control as="select" defaultValue="Wybierz"
                                               onChange={(e) => this.setState({level: e.target.value})}>
                                     <option>Wybierz</option>
-                                    <option>poczatkujacy</option>
-                                    <option>sredniozaawansowany</option>
+                                    <option>początkujacy</option>
+                                    <option>średniozaawansowany</option>
                                     <option>zaawansowany</option>
                                 </Form.Control>
                             </Form.Group>

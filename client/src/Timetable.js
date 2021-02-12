@@ -27,7 +27,7 @@ class Timetable extends Component {
             //headers: ["6:00", "6:15", "6:30", "6:45", "7:00", "7:15", "6:00", "6:15", "6:30", "6:45", "7:00", "7:15", "6:00", "6:15", "6:30", "6:45", "7:00", "7:15", "6:00", "6:15", "6:30", "6:45", "7:00", "7:15", "6:00", "6:15", "6:30", "6:45", "7:00", "7:15", "6:00", "6:15", "6:30", "6:45", "7:00", "7:15", "6:00", "6:15", "6:30", "6:45", "7:00", "7:15", "6:00", "6:15", "6:30", "6:45", "7:00", "7:15", "6:00", "6:15", "6:30", "6:45", "7:00", "7:15", "6:00", "6:15", "6:30", "6:45", "7:00", "7:15"],
             headers: ["6:00", "6:15", "6:30", "6:45", "7:00", "7:15"],
             data: [
-                [0, 2, 3, 4, 5, 6],
+                [0, 2, null, 4, 5, 6],
                 [7, 8, 9, 10, 11, 12]
             ],
             //data: [],
@@ -41,7 +41,7 @@ class Timetable extends Component {
 
     request() {
         console.log("Sending request");
-        axios.get('/api/v1/timetable',{
+        axios.get('/api/v1/timetable', {
             params: {
                 date: this.state.time
             }
@@ -57,6 +57,7 @@ class Timetable extends Component {
     }
 
     getClicked(rowIndex, columnIndex) {
+        console.log(this.state)
         let result = isDefined(rowIndex) && (rowIndex == this.state.selectedRow) && (this.state.selectedColumnStart <= columnIndex) && (columnIndex <= this.state.selectedColumnStop);
         return result;
     }
@@ -131,44 +132,46 @@ class Timetable extends Component {
     render() {
         return <div className="zero">
             <center>
-            <h1>Selected pool: {this.selectedPool} </h1>
-            <center>
-                <Prev onClick={((e) => this.changeTime(-1))}>Prev</Prev>
-                <div className="date">
-                {this.state.time.toLocaleDateString("pl-PL")}
-                </div>
-                <Next onClick={((e) => this.changeTime(1))}>Next</Next>
-            </center>
-            <div className="flipper zero">
-                <div className="div zero">
-                    <div className="flipper zero inline">
-                <Table bordered size="sm" className="timetable table-responsive zero inline">
-                    <thead>
-                        <tr>
-                            {this.state.headers.map((hour) =>
-                                <td className="header">{hour}</td>
-                            )}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {this.state.data.map((row, rowIndex) =>
-                            <tr>
-                                {row.map((n, columnIndex) => {
-                                    let clicked = this.getClicked(rowIndex, columnIndex);
-                                    return
-                                        <td className={(isDefined(n) ? (clicked ? "selected" : "free") : "busy") + " data"}
-                                               onClick={isDefined(n) ? (e) => this.toggle(rowIndex, columnIndex) : (e)=>{}}>{n}</td>
-                                })}
-                            </tr>
-                        )}
-                    </tbody>
-                </Table>
-            </div>
-                </div>
-                </div>
-            <Button onClick={(e) => changeRootState({page: "dashboard"})} className="leftButton">Dashboard</Button>
-            <Button onClick={(e) => this.makeReservation()} disabled={!this.valid()} className="rightButton">Reserve</Button>
+                <h1>Selected pool: {this.selectedPool} </h1>
+                <center>
+                    <Prev onClick={((e) => this.changeTime(-1))}>Prev</Prev>
+                    <div className="date">
+                        {this.state.time.toLocaleDateString("pl-PL")}
+                    </div>
+                    <Next onClick={((e) => this.changeTime(1))}>Next</Next>
                 </center>
+                <div className="flipper zero">
+                    <div className="div zero">
+                        <div className="flipper zero inline">
+                            <Table bordered size="sm" className="timetable table-responsive zero inline">
+                                <thead>
+                                    <tr>
+                                        {this.state.headers.map((hour) =>
+                                            <td className="header">{hour}</td>
+                                        )}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {this.state.data.map((row, rowIndex) => {
+                                        return <tr>
+                                            {row.map((n, columnIndex) => {
+                                                let clicked = this.getClicked(rowIndex, columnIndex);
+                                                let cellClass = (n || n==0) ? (clicked ? "selected" : "free") : "busy";
+                                                let callback = (n || n==0) ? ((e)=>this.toggle(rowIndex, columnIndex)) : null;
+                                                return <td className={cellClass + " data"} onClick={callback}>{n}</td>;
+                                            })}
+                                        </tr>;
+                                    })}
+                                </tbody>
+                            </Table>
+                        </div>
+                    </div>
+                </div>
+                <Button onClick={(e) => changeRootState({page: "dashboard"})} className="leftButton">Dashboard</Button>
+                <Button onClick={(e) => this.makeReservation()} disabled={!this.valid()} className="rightButton">
+                    Reserve
+                </Button>
+            </center>
         </div>
     }
 

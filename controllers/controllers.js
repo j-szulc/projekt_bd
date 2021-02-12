@@ -68,6 +68,10 @@ const register = (req, res, next) => {
                     tok: tok,
                     msg: "Konto pomyślnie zarejestrowane"
                 })
+            }).catch(err => {
+                res.status(400).json({
+                    msg: err
+                })
             });
        }
     })
