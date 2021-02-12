@@ -55,6 +55,7 @@ class Dashboard extends Component {
                                 <td className="id">{row.id}</td>
                                 <td className="name"> {row.name}</td>
                                 <td className="address">{row.address}</td>
+                                <td className="date">{row.date}</td>
                                 <td className="from">{row.from}</td>
                                 <td className="to">{row.to}</td>
                             </tr>

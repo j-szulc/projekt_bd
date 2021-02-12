@@ -135,7 +135,7 @@ class Timetable extends Component {
                 <h1>Selected pool: {this.selectedPool} </h1>
                 <center>
                     <Prev onClick={((e) => this.changeTime(-1))}>Prev</Prev>
-                    <div className="date">
+                    <div className="timetableHeaderDate">
                         {this.state.time.toLocaleDateString("pl-PL")}
                     </div>
                     <Next onClick={((e) => this.changeTime(1))}>Next</Next>
