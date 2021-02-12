@@ -10,7 +10,7 @@ class Pools extends Component {
     constructor() {
         super();
         this.state = {
-            response: {rows: []},
+            rows:[],
         };
     }
 
@@ -18,7 +18,8 @@ class Pools extends Component {
     componentDidMount() {
         axios.get('/api/v1/pools').then((res) => {
             const data = res.data;
-            this.setState({response: data});
+            console.log(data);
+            this.setState({rows: data});
         });
     }
 
@@ -36,12 +37,12 @@ class Pools extends Component {
                         <th className="address">Adres</th>
                     </tr>
                 </thead>
-                {this.state.response.rows.map((row, rowIndex) => {
+                {this.state.rows.map((row, rowIndex) => {
                         return <tbody>
                             <tr className="poolsRow" onClick={(e)=>this.selectPool(rowIndex)}>
-                                <td className="id">{row[0]}</td>
-                                <td className="name"> {row[1]}</td>
-                                <td className="address">{row[2]}</td>
+                                <td className="id">{row.id}</td>
+                                <td className="name"> {row.nazwa}</td>
+                                <td className="address">{row.adres}</td>
                             </tr>
                         </tbody>;
                     }

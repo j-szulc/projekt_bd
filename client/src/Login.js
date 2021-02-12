@@ -52,6 +52,7 @@ class Login extends Component {
             email: this.state.email,
             password: sha1(this.state.password)
         }).then((response) => {
+            console.log(response);
             console.log("Success!");
             cookies.set('token', '123456789', {path: '/'});
             changeRootState({page: "dashboard"});
