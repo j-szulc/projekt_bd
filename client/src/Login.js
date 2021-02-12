@@ -47,6 +47,8 @@ class Login extends Component {
     }
 
     handleLogin(event) {
+        const errorFun = this.error.bind(this);
+
         event.preventDefault();
         axios.post("/api/v1/login", {
             email: this.state.email,
@@ -60,7 +62,7 @@ class Login extends Component {
         }).catch(function (error) {
             console.log("Error!");
             console.log(error);
-            this.error();
+            errorFun();
         });
     }
 
