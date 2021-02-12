@@ -54,7 +54,7 @@ class Login extends Component {
         }).then((response) => {
             console.log("Success!");
             cookies.set('token', '123456789', {path: '/'});
-            changeRootState({page: "pools"});
+            changeRootState({page: "dashboard"});
             console.log(response);
         }).catch(function (error) {
             console.log("Error!");
@@ -73,7 +73,7 @@ class Login extends Component {
         }).then((response) => {
             console.log("Success!");
             cookies.set('token', '123456789', {path: '/'});
-            changeRootState({page: "pools"});
+            changeRootState({page: "dashboard"});
             console.log(response);
         }).catch((error) => {
             console.log("Error!");

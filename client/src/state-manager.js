@@ -12,4 +12,6 @@ const listen = (type,listener) => {
 
 const changeRootState = (payload) => send("changeState",payload);
 
+const logout = ()=>send("logout",{detail:{}});
+
 export {send,changeRootState, listen};
