@@ -21,6 +21,11 @@ class Queries {
             ' VALUES($1, DEFAULT, $2, $3, $4, $5, $6) RETURNING id', vals);
         return res.rows[0].id;
     }
+
+    static async list(userId) {
+        let res = await db.query('SELECT * FROM rezerwacja WHERE idkonta = $1', [userId]);
+        return res.rows;
+    }
 }
 
 module.exports = Queries;

@@ -91,8 +91,21 @@ const reserve = (req,res,next) => {
     });
 }
 
+const list = (req,res,next) => {
+    Queries.list(req.query.token).then((reservationList) => {
+        res.status(200).json({
+            rows: reservationList
+        });
+    }).catch((err) => {
+        res.status(400).json({
+            msg: err.message
+        })
+    })
+}
+
 module.exports.saySomething = saySomething;
 module.exports.pools = pools;
 module.exports.register = register;
 module.exports.login = login;
 module.exports.reserve = reserve;
+module.exports.list = list;
