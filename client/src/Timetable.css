@@ -1,0 +1,43 @@
+@media all {
+    .div{
+        max-width: 80%;
+        margin-left: auto;
+        margin-right: auto;
+        overflow-x:auto;
+    }
+
+    .flipper{
+        transform:rotateX(180deg);
+        -ms-transform:rotateX(180deg); /* IE 9 */
+        -webkit-transform:rotateX(180deg); /* Safari and Chrome */
+
+    }
+
+    .timetable {
+        table-layout: auto;
+        display: inline-block;
+    }
+
+    .zero{
+        margin-top: 0;
+        padding-top:0;
+        margin-bottom: 0;
+        padding-bottom: 0;
+    }
+
+    .inline{
+        display: inline-block;
+    }
+
+    .free{
+        background-color: rgba(102, 234, 102, 0.5)
+    }
+
+    .busy{
+        background-color: rgb(148, 72, 72)
+    }
+
+    .selected{
+        background-color: rgb(207, 214, 31)
+    }
+}
