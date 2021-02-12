@@ -45,8 +45,10 @@ class Dashboard extends Component {
                     }
                 )}
             </Table>
+            <div className="buttons">
             <Button className="newButton" onClick={(e)=>changeRootState({page: "pools"})}>New reservation</Button>
             <Button className="newButton" onClick={(e)=>send("logout",{detail:e})}>Logout</Button>
+                </div>
         </div>;
     }
 }
