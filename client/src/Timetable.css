@@ -40,11 +40,11 @@
     }
 
     .busy{
-        background-color: rgb(148, 72, 72)
+        background-color: rgba(148, 72, 72,0.5)
     }
 
     .selected{
-        background-color: rgb(207, 214, 31)
+        background-color: rgba(207, 214, 31,0.5)
     }
 
     .leftButton{

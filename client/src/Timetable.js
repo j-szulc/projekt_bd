@@ -23,14 +23,14 @@ class Timetable extends Component {
         let now = new Date();
         this.state = {
             time: new Date(now.getFullYear(), now.getMonth(), now.getDate()),
-            headers: [],
+            //headers: [],
             //headers: ["6:00", "6:15", "6:30", "6:45", "7:00", "7:15", "6:00", "6:15", "6:30", "6:45", "7:00", "7:15", "6:00", "6:15", "6:30", "6:45", "7:00", "7:15", "6:00", "6:15", "6:30", "6:45", "7:00", "7:15", "6:00", "6:15", "6:30", "6:45", "7:00", "7:15", "6:00", "6:15", "6:30", "6:45", "7:00", "7:15", "6:00", "6:15", "6:30", "6:45", "7:00", "7:15", "6:00", "6:15", "6:30", "6:45", "7:00", "7:15", "6:00", "6:15", "6:30", "6:45", "7:00", "7:15", "6:00", "6:15", "6:30", "6:45", "7:00", "7:15"],
-            //headers: ["6:00", "6:15", "6:30", "6:45", "7:00", "7:15"],
-            //data: [
-              //  [1, 2, 3, 4, 5, 6],
-               // [7, 8, 9, 10, 11, 12]
-            //],
-            data: [],
+            headers: ["6:00", "6:15", "6:30", "6:45", "7:00", "7:15"],
+            data: [
+                [0, 2, 3, 4, 5, 6],
+                [7, 8, 9, 10, 11, 12]
+            ],
+            //data: [],
             selectedRow: undefined,
             selectedColumnStart: undefined,
             selectedColumnStop: undefined
@@ -58,7 +58,6 @@ class Timetable extends Component {
 
     getClicked(rowIndex, columnIndex) {
         let result = isDefined(rowIndex) && (rowIndex == this.state.selectedRow) && (this.state.selectedColumnStart <= columnIndex) && (columnIndex <= this.state.selectedColumnStop);
-        console.log(result);
         return result;
     }
 
@@ -95,8 +94,6 @@ class Timetable extends Component {
             this.setState((prevState) => {
                     let copy = Object.assign({}, prevState);
                     copy.selectedRow = rowIndex;
-                    console.log(copy)
-                    console.log("def", isDefined(copy.selectedColumnStart))
                     if (middle) {
                         if (copy.selectedColumnStart == copy.selectedColumnStop)
                             this.resetSelection();
@@ -158,8 +155,9 @@ class Timetable extends Component {
                             <tr>
                                 {row.map((n, columnIndex) => {
                                     let clicked = this.getClicked(rowIndex, columnIndex);
-                                    return <td className={(clicked ? "selected" : "free") + " data"}
-                                               onClick={(e) => this.toggle(rowIndex, columnIndex)}>{n}</td>;
+                                    return
+                                        <td className={(isDefined(n) ? (clicked ? "selected" : "free") : "busy") + " data"}
+                                               onClick={isDefined(n) ? (e) => this.toggle(rowIndex, columnIndex) : (e)=>{}}>{n}</td>
                                 })}
                             </tr>
                         )}
