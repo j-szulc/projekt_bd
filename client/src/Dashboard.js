@@ -7,7 +7,7 @@ import {cookies} from './cookie-manager'
 import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {isDefined} from './helpers'
+import {isDefined,minutesToStr} from './helpers'
 
 class Dashboard extends Component {
 
@@ -64,14 +64,15 @@ class Dashboard extends Component {
                         )
                         :
                         (this.state.rows.map((row, rowIndex) => {
+                            console.log(row);
                             return <tbody>
-                                <tr className="poolsRow" onClick={(e) => this.selectPool(rowIndex)}>
-                                    <td className="id">{row.id}</td>
+                                <tr className="poolsRow">
+                                    <td className="numer">{row.id}</td>
                                     <td className="name"> {row.name}</td>
                                     <td className="address">{row.address}</td>
-                                    <td className="date">{row.date}</td>
-                                    <td className="from">{row.from}</td>
-                                    <td className="to">{row.to}</td>
+                                    <td className="date">{new Date(row.dzien).toLocaleDateString("pl-PL")}</td>
+                                    <td className="from">{minutesToStr(row.czasod)}</td>
+                                    <td className="to">{minutesToStr(row.czasdo)}</td>
                                 </tr>
                             </tbody>;
                         }))

@@ -3,6 +3,7 @@ import './Timetable.css';
 import axios from 'axios'
 import {isDefined} from './helpers'
 import {changeRootState} from './state-manager'
+import {cookies} from './cookie-manager'
 import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button'
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -64,11 +65,13 @@ class Timetable extends Component {
 
     makeReservation() {
         axios.post('/api/v1/reserve', {
+            basenId: this.selectedPool,
+            token: cookies.get("token"),
             selectedPool: this.selectedPool,
             selectedRow: this.state.selectedRow,
             date: this.state.time,
-            start: this.state.headers[this.state.selectedColumnStart],
-            stop: this.state.headers[this.state.selectedColumnStop]
+            start: this.state.selectedColumnStart,
+            stop: this.state.selectedColumnStop
         }).then((response) => {
             console.log("Success!");
             changeRootState({page: "end"});

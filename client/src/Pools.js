@@ -45,7 +45,7 @@ class Pools extends Component {
                 {this.state.errorMsg}
                 {this.state.rows.map((row, rowIndex) => {
                         return <tbody>
-                            <tr className="poolsRow" onClick={(e)=>this.selectPool(rowIndex)}>
+                            <tr className="poolsRow" onClick={(e)=>this.selectPool(this.state.rows[rowIndex].id)}>
                                 <td className="id">{row.id}</td>
                                 <td className="name"> {row.nazwa}</td>
                                 <td className="address">{row.adres}</td>

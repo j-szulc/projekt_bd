@@ -54,11 +54,10 @@ class Login extends Component {
             email: this.state.email,
             password: sha1(this.state.password)
         }).then((response) => {
-            console.log(response);
             console.log("Success!");
-            cookies.set('token', '123456789', {path: '/'});
+            cookies.set('token', response.data.token, {path: '/'});
             changeRootState({page: "dashboard"});
-            console.log(response);
+            console.log(cookies.get('token'));
         }).catch(function (error) {
             console.log("Error!");
             console.log(error);
@@ -79,9 +78,9 @@ class Login extends Component {
             level: this.state.level
         }).then((response) => {
             console.log("Success!");
-            cookies.set('token', '123456789', {path: '/'});
+            cookies.set('token', response.data.token, {path: '/'});
             changeRootState({page: "dashboard"});
-            console.log(response);
+            console.log(cookies.get('token'));
         }).catch((error) => {
             console.log("Error!");
             console.log(error);
