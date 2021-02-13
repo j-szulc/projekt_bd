@@ -24,14 +24,14 @@ class Timetable extends Component {
         let now = new Date();
         this.state = {
             time: new Date(now.getFullYear(), now.getMonth(), now.getDate()),
-            //headers: [],
+            headers: [],
             //headers: ["6:00", "6:15", "6:30", "6:45", "7:00", "7:15", "6:00", "6:15", "6:30", "6:45", "7:00", "7:15", "6:00", "6:15", "6:30", "6:45", "7:00", "7:15", "6:00", "6:15", "6:30", "6:45", "7:00", "7:15", "6:00", "6:15", "6:30", "6:45", "7:00", "7:15", "6:00", "6:15", "6:30", "6:45", "7:00", "7:15", "6:00", "6:15", "6:30", "6:45", "7:00", "7:15", "6:00", "6:15", "6:30", "6:45", "7:00", "7:15", "6:00", "6:15", "6:30", "6:45", "7:00", "7:15", "6:00", "6:15", "6:30", "6:45", "7:00", "7:15"],
-            headers: ["6:00", "6:15", "6:30", "6:45", "7:00", "7:15"],
-            data: [
-                [0, 2, null, 4, 5, 6],
-                [7, 8, 9, 10, 11, 12]
-            ],
-            //data: [],
+            //headers: ["6:00", "6:15", "6:30", "6:45", "7:00", "7:15"],
+            //data: [
+            //    [0, 2, null, 4, 5, 6],
+             //   [7, 8, 9, 10, 11, 12]
+            //],
+            data: [],
             selectedRow: undefined,
             selectedColumnStart: undefined,
             selectedColumnStop: undefined
@@ -44,12 +44,14 @@ class Timetable extends Component {
         console.log("Sending request");
         axios.get('/api/v1/timetable', {
             params: {
+                basenId: this.selectedPool,
                 date: this.state.time
             }
         }).then((res) => {
             const data = res.data;
+            console.log("Timetable:")
             console.log(data);
-            //this.setState(data);
+            this.setState({headers: data.headers, data: data.data});
         });
     }
 

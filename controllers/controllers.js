@@ -119,12 +119,22 @@ const list = (req,res,next) => {
 }
 
 const poolInfo = (req,res,next) => {
-    Queries.getPoolInfo(req.query.id).then(rows => {
+    Queries.getPoolInfo(req.query.id).then((rows) => {
         res.status(200).json(rows);
     }).catch((err)=>
     res.status(400).json({msg:err.message})
     )
 }
+
+const timetable = (req,res,next) => {
+    console.log(req.query.basenId)
+    Queries.timetable(req.query.basenId,req.query.date).then((data)=>{
+        res.status(200).json(data);
+    }).catch((err)=>{
+        res.status(400).json({msg:err.message})
+    });
+}
+
 module.exports.saySomething = saySomething;
 module.exports.pools = pools;
 module.exports.register = register;
@@ -132,3 +142,4 @@ module.exports.login = login;
 module.exports.reserve = reserve;
 module.exports.list = list;
 module.exports.poolInfo = poolInfo;
+module.exports.timetable = timetable;

@@ -1,5 +1,7 @@
 const db = require('../db');
 
+const minutesToStr = (min) => (min/60|0).toString().padStart(2,"0") + ":" + (min%60).toString().padStart(2,"0");
+
 class Queries {
     static async loginAuth(vals) {
         let res = await db.query('SELECT id FROM konto WHERE mail = $1 AND haszhasla = $2', vals);
@@ -32,11 +34,15 @@ class Queries {
         return res.rows;
     }
 
+    static async cennik(basenId, dayOfTheWeek){
+        return (await db.query('SELECT * FROM cennikigodzinyotwarcia WHERE idbasenu = $1 AND dzientygodnia = $2',[basenId, dayOfTheWeek])).rows[0];
+    }
+
     static async reserve(userId, basenId, date, nrToru, offsetStart, offsetStop) {
         // TODO check day of the week ordering
         // TODO auth
         let dayOfTheWeek = date.getDay()+1;
-        let cennik = (await db.query('SELECT * FROM cennikigodzinyotwarcia WHERE idbasenu = $1 AND dzientygodnia = $2',[basenId, dayOfTheWeek])).rows[0];
+        let cennik = await this.cennik(basenId,dayOfTheWeek);
         let offset = cennik.otwarteod;
         let start = offset + offsetStart;
         let stop  = offset + offsetStop;
@@ -47,6 +53,32 @@ class Queries {
         } else
             return false;
 
+    }
+
+    static async timetable(basenId,date){
+        let vals = [basenId,new Date(date).toISOString().split('T')[0]];
+        let rezerwacje = (await db.query("SELECT * FROM rezerwacja WHERE idbasenu=$1 AND dzien=$2",vals)).rows;
+        let poolInfo = (await this.getPoolInfo(basenId))[0];
+        let cennik = (await this.cennik(basenId,new Date(date).getDay()+1));
+        let headers = [];
+        let slots = 0;
+        for(let czas=cennik.otwarteod; czas<=cennik.otwartedo; czas+=15) {
+            headers.push(minutesToStr(czas));
+            slots++;
+        }
+        let data = new Array(poolInfo.ilosctorow);
+        for(let i=0; i<data.length; i++){
+            data[i] = new Array(slots);
+            data[i].fill(0);
+        }
+        rezerwacje.map((row,rowIndex)=>{
+            let start = headers.indexOf(minutesToStr(row.czasod));
+            let stop = headers.indexOf(minutesToStr(row.czasdo));
+            for(let i=start; i<=stop; i++){
+                data[rowIndex][i]++;
+            }
+        });
+        return {headers:headers, data:data};
     }
 }
 

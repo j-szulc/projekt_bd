@@ -9,5 +9,6 @@ router.post('/register', controllers.register);
 router.post('/login', controllers.login);
 router.post('/reserve', controllers.reserve);
 router.get('/list', controllers.list);
+router.get('/timetable', controllers.timetable);
 
 module.exports = router;
