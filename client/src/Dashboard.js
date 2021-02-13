@@ -7,7 +7,7 @@ import {cookies} from './cookie-manager'
 import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {isDefined,minutesToStr} from './helpers'
+import {isDefined, minutesToStr} from './helpers'
 
 class Dashboard extends Component {
 
@@ -16,10 +16,15 @@ class Dashboard extends Component {
         this.state = {
             waitForServer: true,
             rows: [],
-            errorMsg: ""
+            errorMsg: "",
+            poolInfo: new Map()
         };
     }
 
+    getPoolInfo(id) {
+        let res  = this.state.poolInfo.get(id);
+        return res ? res : {nazwa:"",adres:""};
+    }
 
     componentDidMount() {
         changeRootState({});
@@ -28,6 +33,21 @@ class Dashboard extends Component {
             const data = res.data;
             console.log(data);
             this.setState({rows: data.rows, waitForServer: false});
+            data.rows.map((row)=> {
+                axios.get('/api/v1/poolInfo', {
+                    params: {
+                        id: row.idbasenu
+                    }
+                }).then((res) => {
+                    let data = res.data[0];
+                    this.setState((prevState) => {
+                        let copy = Object.assign({}, prevState);
+                        copy.poolInfo.set(data.id, {nazwa: data.nazwa, adres: data.adres});
+                        console.log(copy);
+                        return copy;
+                    });
+                }).catch((err) => this.setState({errorMsg: err.message}));
+            });
         }).catch((err) => {
             this.setState({errorMsg: "Error downloading reservation data: \n" + err});
         });
@@ -50,32 +70,32 @@ class Dashboard extends Component {
                 {this.state.waitForServer ?
                     (
                         <tbody>
-                        <tr>
-                            <th colSpan="100%">Proszę czekać</th>
-                        </tr>
-                    </tbody>
-                    )
-                    : (this.state.rows.length == 0 ?
-                        (<tbody>
                             <tr>
-                                <th colSpan="100%">Nie masz żadnych rezerwacji</th>
+                                <th colSpan="100%">Proszę czekać</th>
                             </tr>
                         </tbody>
-                        )
-                        :
-                        (this.state.rows.map((row, rowIndex) => {
-                            console.log(row);
-                            return <tbody>
-                                <tr className="poolsRow">
-                                    <td className="numer">{row.id}</td>
-                                    <td className="name"> {row.name}</td>
-                                    <td className="address">{row.address}</td>
-                                    <td className="date">{new Date(row.dzien).toLocaleDateString("pl-PL")}</td>
-                                    <td className="from">{minutesToStr(row.czasod)}</td>
-                                    <td className="to">{minutesToStr(row.czasdo)}</td>
-                                </tr>
-                            </tbody>;
-                        }))
+                    )
+                    : (this.state.rows.length == 0 ?
+                            (<tbody>
+                                    <tr>
+                                        <th colSpan="100%">Nie masz żadnych rezerwacji</th>
+                                    </tr>
+                                </tbody>
+                            )
+                            :
+                            (this.state.rows.map((row, rowIndex) => {
+                                console.log(row);
+                                return <tbody>
+                                    <tr className="poolsRow">
+                                        <td className="numer">{row.id}</td>
+                                        <td className="name"> {this.getPoolInfo(row.idbasenu).nazwa}</td>
+                                        <td className="address">{this.getPoolInfo(row.idbasenu).adres}</td>
+                                        <td className="date">{new Date(row.dzien).toLocaleDateString("pl-PL")}</td>
+                                        <td className="from">{minutesToStr(row.czasod)}</td>
+                                        <td className="to">{minutesToStr(row.czasdo)}</td>
+                                    </tr>
+                                </tbody>;
+                            }))
                     )
                 }
             </Table>

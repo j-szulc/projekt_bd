@@ -11,6 +11,11 @@ class Queries {
         return res.rows;
     }
 
+    static async getPoolInfo(poolId) {
+        let res = await db.query('SELECT * FROM basen WHERE id=$1',[poolId]);
+        return res.rows;
+    }
+
     static async isRegistered(mail) {
         let res = await db.query('SELECT * FROM konto WHERE mail = $1', mail)
         return res.rowCount > 0;
