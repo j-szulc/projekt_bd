@@ -76,12 +76,6 @@ class App extends Component {
     render() {
         return (
             <div className="App">
-                <h1>HELLO from the frontend!</h1>
-                <button onClick={(e) => this.logout()}>Logout</button>
-                <button onClick={(e) => this.receiveStateChange({page: "pools"})}>Make a reservation</button>
-                <button onClick={(e) => this.receiveStateChange({page: "dashboard"})}>List reservations</button>
-                <h1>{this.state.response.body}</h1>
-                {this.state.page}
                 {this.currentPage()}
             </div>
         );
