@@ -41,13 +41,14 @@ class Queries {
     static async reserve(userId, basenId, date, nrToru, offsetStart, offsetStop) {
         // TODO check day of the week ordering
         // TODO auth
+        let time = date.getFullYear().toString()+"-"+(date.getMonth()+1).toString().padStart(2,"0")+"-"+date.getDate().toString().padStart(2,"0");
         let dayOfTheWeek = date.getDay()+1;
         let cennik = await this.cennik(basenId,dayOfTheWeek);
         let offset = cennik.otwarteod;
         let start = offset + offsetStart;
         let stop  = offset + offsetStop;
         if(stop <= cennik.otwartedo){
-            let vals=[basenId,userId,nrToru,start,stop,date.toISOString().split('T')[0]];
+            let vals=[basenId,userId,nrToru,start,stop,time];
             let id = await db.query('INSERT INTO rezerwacja(id,idbasenu,idkonta,nrtoru,liczbaosob,czyrezerwacjacalegotoru,czasod,czasdo,dzien) VALUES(DEFAULT, $1, $2, $3, DEFAULT, DEFAULT, $4,$5,$6) RETURNING id',vals);
             return id.rows[0].id;
         } else
