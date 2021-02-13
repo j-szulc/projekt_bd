@@ -1,3 +1,5 @@
+import {cookies} from './cookie-manager'
+import axios from 'axios'
 
 const rootMessenger = new EventTarget();
 
@@ -14,4 +16,16 @@ const changeRootState = (payload) => send("changeState",payload);
 
 const logout = ()=>send("logout",{detail:{}});
 
-export {send,changeRootState, listen};
+async function checkCookies () {
+    let res = await axios.get('/api/v1/validToken',{
+        params: {
+            token: cookies.get('token')
+        }
+    });
+    console.log(res);
+    if(!res.data.valid)
+        changeRootState({page: "login"});
+    return res.data.valid;
+}
+
+export {send,changeRootState, listen,checkCookies};

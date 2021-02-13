@@ -10,5 +10,6 @@ router.post('/login', controllers.login);
 router.post('/reserve', controllers.reserve);
 router.get('/list', controllers.list);
 router.get('/timetable', controllers.timetable);
+router.get('/validToken', controllers.validToken);
 
 module.exports = router;

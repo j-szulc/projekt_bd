@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import './Timetable.css';
 import axios from 'axios'
 import {isDefined} from './helpers'
-import {changeRootState} from './state-manager'
+import {changeRootState,checkCookies} from './state-manager'
 import {cookies} from './cookie-manager'
 import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button'
@@ -137,6 +137,7 @@ class Timetable extends Component {
 
 
     render() {
+        checkCookies();
         return <div className="zero">
             <center>
                 <center>

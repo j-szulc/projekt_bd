@@ -137,6 +137,13 @@ const timetable = (req,res,next) => {
     });
 }
 
+const validToken = (req,res,next) => {
+    res.status(200).json({
+            valid: tokMap.has(req.query.token)
+        }
+    );
+}
+
 module.exports.saySomething = saySomething;
 module.exports.pools = pools;
 module.exports.register = register;
@@ -145,3 +152,4 @@ module.exports.reserve = reserve;
 module.exports.list = list;
 module.exports.poolInfo = poolInfo;
 module.exports.timetable = timetable;
+module.exports.validToken = validToken;

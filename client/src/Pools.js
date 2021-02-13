@@ -32,6 +32,7 @@ class Pools extends Component {
     }
 
     render() {
+        checkCookies();
         return <div className="pools">
             <div className="error">{this.state.errorMsg}</div>
             <Table bordered className="poolsTable">
