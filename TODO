@@ -1,8 +1,8 @@
-Pilnowanie obostrzeń (jak chcesz zablokować dane pole to zamiast liczby przekazujesz null)
+Pilnowanie obostrzeń (jak chcesz zablokować dane pole to zamiast liczby przekazujesz null) - zrobione
 
-Trigger
+Trigger - będzie blokować krótkie rezerwacje (chyba, że masz jakiś lepszy pomysł)
 
-Uniemożliwienie rezerwacji w przeszłości
+Uniemożliwienie rezerwacji w przeszłości - ja bym to zrobił na froncie
 
 *ujednolicenie języka (zamiana Dashboard w Lista albo Menu itp)
 

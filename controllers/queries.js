@@ -31,6 +31,11 @@ class Queries {
         return res.rows[0].id;
     }
 
+    static async getUserInfo(userId) {
+        let res = await db.query('SELECT imie, nazwisko, mail, nrtelefonu, poziomzaawansowania FROM konto WHERE id = $1', [userId]);
+        return res.rows[0];
+    }
+
     static async list(userId) {
         let res = await db.query('SELECT * FROM rezerwacja WHERE idkonta = $1', [userId]);
         return res.rows;
@@ -63,7 +68,7 @@ class Queries {
         let rezerwacje = (await db.query("SELECT * FROM rezerwacja WHERE idbasenu=$1 AND dzien=$2",vals)).rows;
         let poolInfo = (await this.getPoolInfo(basenId))[0];
         let limitOsob = (await db.query('SELECT maxliczbaosobnatorze FROM obostrzeniasanitarne WHERE idbasenu = $1', [basenId])).rows[0].maxliczbaosobnatorze;
-        // let msg = (await db.query('SELECT podstawoweinformacje FROM obostrzeniasanitarne WHERE idbasenu = $1', [basenId]));
+        // let msg = (await db.query('SELECT podstawoweinformacje FROM obostrzeniasanitarne WHERE idbasenu = $1', [basenId])); //FIXME:
         let cennik = (await this.cennik(basenId,new Date(date).getDay()+1));
         let headers = [];
         let slots = 0;
@@ -89,7 +94,8 @@ class Queries {
                 if(data[i][j] >= limitOsob) data[i][j] = null;
             }
         }
-        // tu możnaby jeszcze przekazywać wiadomość od sanepidu
+        // TODO: tu możnaby jeszcze przekazywać wiadomość od sanepidu
+        // return {headers: headers, data: data, msg: msg};
         return {headers:headers, data:data};
     }
 }

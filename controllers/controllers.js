@@ -85,6 +85,13 @@ const pools = (req,res,next) => {
     })
 }
 
+// TODO: wyświetlanie informacji o użytkowniku
+const userInfo = (req, res, next) => {
+    let userId = tokMap.get(req.body.token);
+    Queries.getUserInfo(userId).then(row => {
+      res.status(200).json(row);
+    });
+}
 
 const reserve = (req,res,next) => {
     let basenId = req.body.basenId;
