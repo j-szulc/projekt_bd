@@ -62,6 +62,8 @@ class Queries {
         let vals = [basenId,dateToPG(date)];
         let rezerwacje = (await db.query("SELECT * FROM rezerwacja WHERE idbasenu=$1 AND dzien=$2",vals)).rows;
         let poolInfo = (await this.getPoolInfo(basenId))[0];
+        let limitOsob = (await db.query('SELECT maxliczbaosobnatorze FROM obostrzeniasanitarne WHERE idbasenu = $1', [basenId])).rows[0].maxliczbaosobnatorze;
+        // let msg = (await db.query('SELECT podstawoweinformacje FROM obostrzeniasanitarne WHERE idbasenu = $1', [basenId]));
         let cennik = (await this.cennik(basenId,new Date(date).getDay()+1));
         let headers = [];
         let slots = 0;
@@ -81,6 +83,13 @@ class Queries {
                 data[row.nrtoru-1][i]+=1;
             }
         });
+        // sprawdzenie czy obostrzenia są dochowane
+        for(let i = 0; i < data.length; ++i) {
+            for(let j = 0; j < data[i].length; ++j) {
+                if(data[i][j] >= limitOsob) data[i][j] = null;
+            }
+        }
+        // tu możnaby jeszcze przekazywać wiadomość od sanepidu
         return {headers:headers, data:data};
     }
 }
