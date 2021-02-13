@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import './Pools.css';
 import './Login.css';
 import axios from 'axios'
-import {changeRootState} from './state-manager'
+import {changeRootState,checkCookies} from './state-manager'
 import Table from 'react-bootstrap/Table'
 import 'bootstrap/dist/css/bootstrap.min.css';
 

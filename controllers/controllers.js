@@ -94,16 +94,22 @@ const reserve = (req,res,next) => {
     let date = new Date(req.body.date);
     let offsetStart = req.body.start*15;
     let offsetStop = req.body.stop*15;
-    Queries.reserve(userId, basenId, date, nrtoru,offsetStart, offsetStop).then((q)=> {
-        res.status(200).json({
-            success: true
+    if(tokMap.has(token)) {
+        Queries.reserve(userId, basenId, date, nrtoru, offsetStart, offsetStop).then((q) => {
+            res.status(200).json({
+                success: true
+            });
+        }).catch((err) => {
+            console.log(err);
+            res.status(400).json({
+                msg: err.message
+            })
         });
-    }).catch((err)=>{
-        console.log(err);
+    } else {
         res.status(400).json({
-            msg: err.message
-        })
-    });
+            msg: "Invalid token - please logout"
+        });
+    }
 }
 
 const list = (req,res,next) => {
