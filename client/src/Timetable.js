@@ -76,7 +76,7 @@ class Timetable extends Component {
             stop: this.state.selectedColumnStop
         }).then((response) => {
             console.log("Success!");
-            changeRootState({page: "end"});
+            changeRootState({page: "dashboard"});
             console.log(response);
         }).catch(function (error) {
             console.log("Error!");
@@ -127,6 +127,8 @@ class Timetable extends Component {
         this.setState((prevState) => {
             let copy = Object.assign({}, prevState);
             copy.time.setDate(newDate);
+            copy.headers = [];
+            copy.data = [];
             return copy;
         })
         this.resetSelection();
@@ -137,7 +139,6 @@ class Timetable extends Component {
     render() {
         return <div className="zero">
             <center>
-                <h1>Selected pool: {this.selectedPool} </h1>
                 <center>
                     <Prev onClick={((e) => this.changeTime(-1))}>Prev</Prev>
                     <div className="timetableHeaderDate">
