@@ -73,7 +73,7 @@ class Timetable extends Component {
             selectedRow: this.state.selectedRow,
             date: this.state.time,
             start: this.state.selectedColumnStart,
-            stop: this.state.selectedColumnStop
+            stop: this.state.selectedColumnStop,
         }).then((response) => {
             console.log("Success!");
             changeRootState({page: "dashboard"});

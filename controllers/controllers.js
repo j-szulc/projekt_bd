@@ -88,12 +88,13 @@ const pools = (req,res,next) => {
 
 const reserve = (req,res,next) => {
     let basenId = req.body.basenId;
+    let nrtoru = req.body.selectedRow+1;
     let token = req.body.token;
     let userId = tokMap.get(token);
     let date = new Date(req.body.date);
     let offsetStart = req.body.start*15;
     let offsetStop = req.body.stop*15;
-    Queries.reserve(userId, basenId, date, 1,offsetStart, offsetStop).then((q)=> {
+    Queries.reserve(userId, basenId, date, nrtoru,offsetStart, offsetStop).then((q)=> {
         res.status(200).json({
             success: true
         });
@@ -128,7 +129,8 @@ const poolInfo = (req,res,next) => {
 
 const timetable = (req,res,next) => {
     console.log(req.query.basenId)
-    Queries.timetable(req.query.basenId,req.query.date).then((data)=>{
+    let date = new Date(req.query.date);
+    Queries.timetable(req.query.basenId,date).then((data)=>{
         res.status(200).json(data);
     }).catch((err)=>{
         res.status(400).json({msg:err.message})

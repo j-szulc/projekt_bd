@@ -2,6 +2,8 @@ const db = require('../db');
 
 const minutesToStr = (min) => (min/60|0).toString().padStart(2,"0") + ":" + (min%60).toString().padStart(2,"0");
 
+const dateToPG = (date) => date.getFullYear().toString()+"-"+(date.getMonth()+1).toString().padStart(2,"0")+"-"+date.getDate().toString().padStart(2,"0");
+
 class Queries {
     static async loginAuth(vals) {
         let res = await db.query('SELECT id FROM konto WHERE mail = $1 AND haszhasla = $2', vals);
@@ -41,12 +43,12 @@ class Queries {
     static async reserve(userId, basenId, date, nrToru, offsetStart, offsetStop) {
         // TODO check day of the week ordering
         // TODO auth
-        let time = date.getFullYear().toString()+"-"+(date.getMonth()+1).toString().padStart(2,"0")+"-"+date.getDate().toString().padStart(2,"0");
+        let time = dateToPG(date);
         let dayOfTheWeek = date.getDay()+1;
         let cennik = await this.cennik(basenId,dayOfTheWeek);
         let offset = cennik.otwarteod;
         let start = offset + offsetStart;
-        let stop  = offset + offsetStop;
+        let stop  = offset + offsetStop+15;
         if(stop <= cennik.otwartedo){
             let vals=[basenId,userId,nrToru,start,stop,time];
             let id = await db.query('INSERT INTO rezerwacja(id,idbasenu,idkonta,nrtoru,liczbaosob,czyrezerwacjacalegotoru,czasod,czasdo,dzien) VALUES(DEFAULT, $1, $2, $3, DEFAULT, DEFAULT, $4,$5,$6) RETURNING id',vals);
@@ -57,13 +59,13 @@ class Queries {
     }
 
     static async timetable(basenId,date){
-        let vals = [basenId,new Date(date).toISOString().split('T')[0]];
+        let vals = [basenId,dateToPG(date)];
         let rezerwacje = (await db.query("SELECT * FROM rezerwacja WHERE idbasenu=$1 AND dzien=$2",vals)).rows;
         let poolInfo = (await this.getPoolInfo(basenId))[0];
         let cennik = (await this.cennik(basenId,new Date(date).getDay()+1));
         let headers = [];
         let slots = 0;
-        for(let czas=cennik.otwarteod; czas<=cennik.otwartedo; czas+=15) {
+        for(let czas=cennik.otwarteod; czas<=cennik.otwartedo-15; czas+=15) {
             headers.push(minutesToStr(czas));
             slots++;
         }
@@ -72,11 +74,11 @@ class Queries {
             data[i] = new Array(slots);
             data[i].fill(0);
         }
-        rezerwacje.map((row,rowIndex)=>{
+        rezerwacje.map((row)=>{
             let start = headers.indexOf(minutesToStr(row.czasod));
             let stop = headers.indexOf(minutesToStr(row.czasdo));
-            for(let i=start; i<=stop; i++){
-                data[rowIndex][i]++;
+            for(let i=start; i<stop; i++){
+                data[row.nrtoru-1][i]+=1;
             }
         });
         return {headers:headers, data:data};
