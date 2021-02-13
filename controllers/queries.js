@@ -41,7 +41,7 @@ class Queries {
         let start = offset + offsetStart;
         let stop  = offset + offsetStop;
         if(stop <= cennik.otwartedo){
-            let vals=[basenId,userId,nrToru,start,stop,"2000-01-01"];
+            let vals=[basenId,userId,nrToru,start,stop,date.toISOString().split('T')[0]];
             let id = await db.query('INSERT INTO rezerwacja(id,idbasenu,idkonta,nrtoru,liczbaosob,czyrezerwacjacalegotoru,czasod,czasdo,dzien) VALUES(DEFAULT, $1, $2, $3, DEFAULT, DEFAULT, $4,$5,$6) RETURNING id',vals);
             return id.rows[0].id;
         } else

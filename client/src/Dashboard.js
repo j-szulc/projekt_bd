@@ -62,6 +62,7 @@ class Dashboard extends Component {
                         <th className="id">Id</th>
                         <th className="name=">Nazwa</th>
                         <th className="address">Adres</th>
+                        <th className="nrtoru">Nr toru</th>
                         <th className="date">Data</th>
                         <th className="from">Od</th>
                         <th className="to">Do</th>
@@ -90,6 +91,7 @@ class Dashboard extends Component {
                                         <td className="numer">{row.id}</td>
                                         <td className="name"> {this.getPoolInfo(row.idbasenu).nazwa}</td>
                                         <td className="address">{this.getPoolInfo(row.idbasenu).adres}</td>
+                                        <td className="nrtoru">{row.nrtoru}</td>
                                         <td className="date">{new Date(row.dzien).toLocaleDateString("pl-PL")}</td>
                                         <td className="from">{minutesToStr(row.czasod)}</td>
                                         <td className="to">{minutesToStr(row.czasdo)}</td>
