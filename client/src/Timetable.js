@@ -34,7 +34,8 @@ class Timetable extends Component {
             data: [],
             selectedRow: undefined,
             selectedColumnStart: undefined,
-            selectedColumnStop: undefined
+            selectedColumnStop: undefined,
+            errorMsg: ""
         }
         this.selectedPool = props.selectedPool;
     }
@@ -52,6 +53,8 @@ class Timetable extends Component {
             console.log("Timetable:")
             console.log(data);
             this.setState({headers: data.headers, data: data.data});
+        }).catch((err)=>{
+            this.setState({errorMsg:err});
         });
     }
 
@@ -66,6 +69,12 @@ class Timetable extends Component {
     }
 
     makeReservation() {
+        const errorFun = ((error)=>{
+            console.log("Error!");
+            console.log(error);
+            this.setState({errorMsg:error.message});
+        }).bind(this);
+
         axios.post('/api/v1/reserve', {
             basenId: this.selectedPool,
             token: cookies.get("token"),
@@ -78,9 +87,8 @@ class Timetable extends Component {
             console.log("Success!");
             changeRootState({page: "dashboard"});
             console.log(response);
-        }).catch(function (error) {
-            console.log("Error!");
-            console.log(error);
+        }).catch((error) =>{
+            errorFun(error);
         });
     }
 
@@ -174,6 +182,9 @@ class Timetable extends Component {
                         </div>
                     </div>
                 </div>
+                <center>
+                <div className="error"> {this.state.errorMsg}</div>
+                </center>
                 <Button onClick={(e) => changeRootState({page: "dashboard"})} className="leftButton">Dashboard</Button>
                 <Button onClick={(e) => this.makeReservation()} disabled={!this.valid()} className="rightButton">
                     Reserve
