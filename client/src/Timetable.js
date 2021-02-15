@@ -48,7 +48,6 @@ class Timetable extends Component {
             const data = res.data;
             this.setState({headers: data.headers, data: data.data, waitForServer:false});
         }).catch((err)=>{
-            console.log(error.response.data);
             this.setState({errorMsg:JSON.stringify(err.response.data)});
         });
     }
@@ -65,7 +64,6 @@ class Timetable extends Component {
     makeReservation() {
         const errorFun = ((error)=>{
             console.log("Error!");
-            console.log(error);
             this.setState({errorMsg:error});
         }).bind(this);
 
@@ -80,9 +78,7 @@ class Timetable extends Component {
         }).then((response) => {
             console.log("Success!");
             changeRootState({page: "dashboard"});
-            console.log(response);
         }).catch((error) =>{
-            console.log(error);
             errorFun(JSON.stringify(error.response.data));
         });
     }
