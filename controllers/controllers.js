@@ -27,7 +27,7 @@ const login = (req,res,next) => {
             });
             console.log("Token send");
         } else {
-            res.status(400).send("Podałeś niepoprawne dane logowania!");
+            res.status(400).send("Invalid login data!");
             console.log("Authorization failed");
         }
     });
