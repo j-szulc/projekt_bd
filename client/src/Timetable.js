@@ -50,7 +50,7 @@ class Timetable extends Component {
             console.log(data);
             this.setState({headers: data.headers, data: data.data, waitForServer:false});
         }).catch((err)=>{
-            this.setState({errorMsg:err});
+            this.setState({errorMsg:JSON.stringify(err)});
         });
     }
 
@@ -68,7 +68,7 @@ class Timetable extends Component {
         const errorFun = ((error)=>{
             console.log("Error!");
             console.log(error);
-            this.setState({errorMsg:error.message});
+            this.setState({errorMsg:error});
         }).bind(this);
 
         axios.post('/api/v1/reserve', {
@@ -84,7 +84,7 @@ class Timetable extends Component {
             changeRootState({page: "dashboard"});
             console.log(response);
         }).catch((error) =>{
-            errorFun(error);
+            errorFun(JSON.stringify(error));
         });
     }
 
@@ -126,18 +126,23 @@ class Timetable extends Component {
     }
 
     changeTime(numOfDays) {
-        let newDate = (this.state.time.getDate()) + numOfDays;
-        console.log(newDate);
-        this.setState((prevState) => {
-            let copy = Object.assign({}, prevState);
-            copy.time.setDate(newDate);
-            copy.headers = [];
-            copy.data = [];
-            copy.waitForServer = true;
-            return copy;
-        })
-        this.resetSelection();
-        this.request();
+        let now = new Date();
+        let newTime = new Date(this.state.time);
+        let newDate = (newTime.getDate()) + numOfDays;
+        newTime.setDate(newDate);
+        if (newTime >= new Date(now.getFullYear(),now.getMonth(),now.getDate())) {
+            console.log(newDate);
+            this.setState((prevState) => {
+                let copy = Object.assign({}, prevState);
+                copy.time = newTime;
+                copy.headers = [];
+                copy.data = [];
+                copy.waitForServer = true;
+                return copy;
+            });
+            this.resetSelection();
+            this.request();
+        }
     }
 
 

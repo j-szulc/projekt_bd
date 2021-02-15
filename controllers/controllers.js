@@ -102,9 +102,7 @@ const list = (req,res,next) => {
             rows: reservationList
         });
     }).catch((err) => {
-        res.status(400).json({
-            msg: err.message
-        })
+        res.status(400).send(err.message);
     })
 }
 
@@ -112,7 +110,7 @@ const poolInfo = (req,res,next) => {
     Queries.getPoolInfo(req.query.id).then((rows) => {
         res.status(200).json(rows);
     }).catch((err)=>
-    res.status(400).json({msg:err.message})
+    res.status(400).send(err.message)
     )
 }
 
@@ -122,7 +120,7 @@ const timetable = (req,res,next) => {
     Queries.timetable(req.query.basenId,date).then((data)=>{
         res.status(200).json(data);
     }).catch((err)=>{
-        res.status(400).json({msg:err.message})
+        res.status(400).send(err.message)
     });
 }
 
