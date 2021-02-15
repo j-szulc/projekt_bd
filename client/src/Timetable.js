@@ -143,8 +143,10 @@ class Timetable extends Component {
 
     render() {
         checkCookies();
-        return <div className="zero">
+        return (
+        <div>
             <center>
+                <div className="timetableRootDiv">
                 <center>
                     <Prev onClick={((e) => this.changeTime(-1))}>Prev</Prev>
                     <div className="timetableHeaderDate">
@@ -196,8 +198,11 @@ class Timetable extends Component {
                 <Button onClick={(e) => this.makeReservation()} disabled={!this.valid()} className="rightButton">
                     Reserve
                 </Button>
+                </div>
+
             </center>
-        </div>
+            </div>
+        );
     }
 
 
