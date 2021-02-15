@@ -10,25 +10,20 @@ import {cookies} from './cookie-manager'
 import {isDefined} from './helpers'
 import axios from 'axios'
 import bg from './bg.svg'
+import Jumbotron from 'react-bootstrap/Jumbotron'
 
 class App extends Component {
 
     constructor() {
         super();
         this.state = {
-            page: "pools",
+            page: "dashboard",
             response: {body: ""},
         };
     }
 
     componentDidMount() {
         this.receiveStateChange({});
-        axios.get('/api/v1/say-something').then((res) => {
-            const response = res.data;
-            console.log(res);
-            console.log(response);
-            this.setState({response});
-        });
     }
 
     componentWillMount() {
@@ -39,7 +34,7 @@ class App extends Component {
     }
 
     receiveStateChange(payload) {
-        if(!isDefined(cookies.get("token")))
+        if (!isDefined(cookies.get("token")))
             payload.page = "login";
         this.setState(payload);
     }
@@ -63,7 +58,7 @@ class App extends Component {
         }
     }
 
-    logout(payload={}) {
+    logout(payload = {}) {
         cookies.remove('token');
         this.receiveStateChange({});
     }
@@ -71,9 +66,9 @@ class App extends Component {
     render() {
         return (
             <div style={{backgroundImage: `url(${bg})`}} className="bg">
-            <div className="App" >
-                {this.currentPage()}
-            </div>
+                        <div className="App">
+                            {this.currentPage()}
+                        </div>
                 </div>
         );
     }

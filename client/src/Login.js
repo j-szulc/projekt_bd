@@ -94,7 +94,7 @@ class Login extends Component {
         return (
             <div className="Login">
                 <Tabs onSelect={this.resetError} >
-                    <Tab eventKey="Login" title="Login" onClick={this.resetError}>
+                    <Tab eventKey="LoginTab" title="Login" onClick={this.resetError} tabClassName="noborder">
                         <div className="error"> {this.state.errorMsg}</div>
                         <Form onSubmit={(e) => this.handleLogin(e)}>
                             <Form.Group size="lg" controlId="email">
