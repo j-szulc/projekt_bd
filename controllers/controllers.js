@@ -35,9 +35,7 @@ const login = (req,res,next) => {
             });
             console.log("Token send");
         } else {
-            res.status(400).json({
-                msg: "Podałeś niepoprawne dane logowania!"
-            })
+            res.status(400).send("Podałeś niepoprawne dane logowania!");
             console.log("Authorization failed");
         }
     });
@@ -54,28 +52,20 @@ const register = (req, res, next) => {
 
     Queries.isRegistered([mail]).then(registered => {
         if (registered) {
-            res.status(400).json({
-                msg: "Konto o podanym mailu już istnieje!"
-            })
-            console.log("Już istnieje");
+            res.status(400).send("Account already registered!");
         } else {
-            console.log("No to rejestrujemy");
             let vals = [mail, name, surname, phone, password, lvl];
             let tok = tokGen.generate();
             Queries.registerUser(vals).then(id => {
                 tokMap.set(tok,id);
                 console.log(id);
                 res.status(200).json({
-                    tok: tok,
-                    msg: "Konto pomyślnie zarejestrowane"
-                })
+                    tok: tok
+                });
             }).catch(err => {
-                res.status(400).json({
-                    msg: err
-                })
+                res.status(400).send(err);
             });
-       }
-    })
+    }});
 }
 
 // Dashboard

@@ -33,8 +33,8 @@ class Login extends Component {
         return this.state.email.length > 0 && this.state.password.length > 0 && isDefined(this.state.tel) && this.state.tel.length > 0 && this.state.level.length > 0 && this.state.level != "Wybierz";
     }
 
-    error(){
-        this.setState({errorMsg: "Error", password: ""});
+    error(errorMsg){
+        this.setState({errorMsg: errorMsg, password: ""});
     }
 
     resetError(){
@@ -60,8 +60,8 @@ class Login extends Component {
             console.log(cookies.get('token'));
         }).catch(function (error) {
             console.log("Error!");
-            console.log(error);
-            errorFun();
+            console.log(error.response.data);
+            errorFun(error.response.data);
         });
     }
 
@@ -84,7 +84,7 @@ class Login extends Component {
         }).catch((error) => {
             console.log("Error!");
             console.log(error);
-            errorFun();
+            errorFun(error.response.data);
         });
     }
 
