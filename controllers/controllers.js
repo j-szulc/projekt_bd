@@ -2,14 +2,6 @@ const Queries = require('./queries');
 const db = require('../db');
 const TokenGenerator = require('uuid-token-generator');
 
-const saySomething = (req, res, next) => {
-    db.query("SELECT * FROM KONTO",(derr,dres)=> {
-        res.status(200).json({
-            body: dres.rows[0].mail
-        });
-    });
-};
-
 /*
 *  TODO:
 *   * Strona tytułowa:
@@ -60,7 +52,7 @@ const register = (req, res, next) => {
                 tokMap.set(tok,id);
                 console.log(id);
                 res.status(200).json({
-                    tok: tok
+                    token: tok
                 });
             }).catch(err => {
                 res.status(400).send(err);
@@ -93,19 +85,13 @@ const reserve = (req,res,next) => {
     let offsetStop = req.body.stop*15;
     if(tokMap.has(token)) {
         Queries.reserve(userId, basenId, date, nrtoru, offsetStart, offsetStop).then((q) => {
-            res.status(200).json({
-                success: true
-            });
+            res.status(200).send();
         }).catch((err) => {
             console.log(err);
-            res.status(400).json({
-                msg: err.message
-            })
+            res.status(400).send(err);
         });
     } else {
-        res.status(400).json({
-            msg: "Invalid token - please logout"
-        });
+        res.status(400).send("Invalid token - please logout");
     }
 }
 
@@ -147,7 +133,6 @@ const validToken = (req,res,next) => {
     );
 }
 
-module.exports.saySomething = saySomething;
 module.exports.pools = pools;
 module.exports.register = register;
 module.exports.login = login;

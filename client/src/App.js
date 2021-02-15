@@ -9,6 +9,7 @@ import {listen} from './state-manager'
 import {cookies} from './cookie-manager'
 import {isDefined} from './helpers'
 import axios from 'axios'
+import bg from './bg.svg'
 
 class App extends Component {
 
@@ -69,9 +70,11 @@ class App extends Component {
 
     render() {
         return (
-            <div className="App">
+            <div style={{backgroundImage: `url(${bg})`}} className="bg">
+            <div className="App" >
                 {this.currentPage()}
             </div>
+                </div>
         );
     }
 }

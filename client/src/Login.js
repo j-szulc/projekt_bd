@@ -21,7 +21,9 @@ class Login extends Component {
             password: "",
             tel: "",
             level: "",
-            errorMsg: "⠀"
+            errorMsg: "⠀",
+            name: "",
+            surname: ""
         };
     }
 
@@ -30,7 +32,7 @@ class Login extends Component {
     }
 
     validateRegister() {
-        return this.state.email.length > 0 && this.state.password.length > 0 && isDefined(this.state.tel) && this.state.tel.length > 0 && this.state.level.length > 0 && this.state.level != "Wybierz";
+        return this.state.email.length > 0 && this.state.password.length > 0 && this.state.name.length > 0 && this.state.surname.length>0 && isDefined(this.state.tel) && this.state.tel.length > 0 && this.state.level.length > 0 && this.state.level != "Wybierz";
     }
 
     error(errorMsg){
@@ -61,7 +63,7 @@ class Login extends Component {
         }).catch(function (error) {
             console.log("Error!");
             console.log(error.response.data);
-            errorFun(error.response.data);
+            errorFun(JSON.stringify(error.response.data));
         });
     }
 
@@ -84,7 +86,7 @@ class Login extends Component {
         }).catch((error) => {
             console.log("Error!");
             console.log(error);
-            errorFun(error.response.data);
+            errorFun(JSON.stringify(error.response.data));
         });
     }
 
@@ -170,9 +172,9 @@ class Login extends Component {
                                 <Form.Control as="select" defaultValue="Wybierz"
                                               onChange={(e) => this.setState({level: e.target.value})}>
                                     <option>Wybierz</option>
-                                    <option>początkujacy</option>
-                                    <option>średniozaawansowany</option>
-                                    <option>zaawansowany</option>
+                                    <option>beginner</option>
+                                    <option>intermediate</option>
+                                    <option>advanced</option>
                                 </Form.Control>
                             </Form.Group>
                             <Button variant="primary" type="submit" disabled={!this.validateRegister()}>
