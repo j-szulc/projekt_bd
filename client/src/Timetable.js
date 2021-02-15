@@ -46,11 +46,10 @@ class Timetable extends Component {
             }
         }).then((res) => {
             const data = res.data;
-            console.log("Timetable:")
-            console.log(data);
             this.setState({headers: data.headers, data: data.data, waitForServer:false});
         }).catch((err)=>{
-            this.setState({errorMsg:JSON.stringify(err)});
+            console.log(error.response.data);
+            this.setState({errorMsg:JSON.stringify(err.response.data)});
         });
     }
 
@@ -59,7 +58,6 @@ class Timetable extends Component {
     }
 
     getClicked(rowIndex, columnIndex) {
-        console.log(this.state)
         let result = isDefined(rowIndex) && (rowIndex == this.state.selectedRow) && (this.state.selectedColumnStart <= columnIndex) && (columnIndex <= this.state.selectedColumnStop);
         return result;
     }
@@ -84,7 +82,8 @@ class Timetable extends Component {
             changeRootState({page: "dashboard"});
             console.log(response);
         }).catch((error) =>{
-            errorFun(JSON.stringify(error));
+            console.log(error);
+            errorFun(JSON.stringify(error.response.data));
         });
     }
 
