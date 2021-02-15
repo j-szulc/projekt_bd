@@ -8,6 +8,7 @@ import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Prev, Next} from './icons'
+import Spinner from 'react-bootstrap/Spinner'
 
 class Timetable extends Component {
 
@@ -25,13 +26,8 @@ class Timetable extends Component {
         this.state = {
             time: new Date(now.getFullYear(), now.getMonth(), now.getDate()),
             headers: [],
-            //headers: ["6:00", "6:15", "6:30", "6:45", "7:00", "7:15", "6:00", "6:15", "6:30", "6:45", "7:00", "7:15", "6:00", "6:15", "6:30", "6:45", "7:00", "7:15", "6:00", "6:15", "6:30", "6:45", "7:00", "7:15", "6:00", "6:15", "6:30", "6:45", "7:00", "7:15", "6:00", "6:15", "6:30", "6:45", "7:00", "7:15", "6:00", "6:15", "6:30", "6:45", "7:00", "7:15", "6:00", "6:15", "6:30", "6:45", "7:00", "7:15", "6:00", "6:15", "6:30", "6:45", "7:00", "7:15", "6:00", "6:15", "6:30", "6:45", "7:00", "7:15"],
-            //headers: ["6:00", "6:15", "6:30", "6:45", "7:00", "7:15"],
-            //data: [
-            //    [0, 2, null, 4, 5, 6],
-             //   [7, 8, 9, 10, 11, 12]
-            //],
             data: [],
+            waitForServer: true,
             selectedRow: undefined,
             selectedColumnStart: undefined,
             selectedColumnStop: undefined,
@@ -52,7 +48,7 @@ class Timetable extends Component {
             const data = res.data;
             console.log("Timetable:")
             console.log(data);
-            this.setState({headers: data.headers, data: data.data});
+            this.setState({headers: data.headers, data: data.data, waitForServer:false});
         }).catch((err)=>{
             this.setState({errorMsg:err});
         });
@@ -137,6 +133,7 @@ class Timetable extends Component {
             copy.time.setDate(newDate);
             copy.headers = [];
             copy.data = [];
+            copy.waitForServer = true;
             return copy;
         })
         this.resetSelection();
@@ -155,9 +152,19 @@ class Timetable extends Component {
                     </div>
                     <Next onClick={((e) => this.changeTime(1))}>Next</Next>
                 </center>
+                {this.state.waitForServer ?
+                    <center>
+                        <tbody>
+                            <tr>
+                                <th colSpan="100%"><Spinner animation="border" role="status"/></th>
+                            </tr>
+                        </tbody>
+                    </center> : <div/>
+                }
                 <div className="flipper zero">
                     <div className="div zero">
                         <div className="flipper zero inline">
+
                             <Table bordered size="sm" className="timetable table-responsive zero inline">
                                 <thead>
                                     <tr>
