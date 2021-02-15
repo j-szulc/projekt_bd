@@ -1,4 +1,4 @@
-@media all and (min-width: 480px) {
+@media all {
     .dashboard{
         max-width: 80%;
         padding: 10px;
@@ -10,6 +10,8 @@
         display: -moz-flex;
         display: -webkit-flex;
         display: -ms-flex;
+        background-color: white;
+        border-radius: .5em;
     }
 
     .dashboardTable{

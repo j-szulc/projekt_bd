@@ -6,6 +6,7 @@ import {changeRootState, send,checkCookies} from './state-manager'
 import {cookies} from './cookie-manager'
 import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button'
+import Spinner from 'react-bootstrap/Spinner'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {isDefined, minutesToStr} from './helpers'
 
@@ -73,7 +74,7 @@ class Dashboard extends Component {
                     (
                         <tbody>
                             <tr>
-                                <th colSpan="100%">Proszę czekać</th>
+                                <th colSpan="100%"><Spinner animation="border" role="status"/></th>
                             </tr>
                         </tbody>
                     )

@@ -1,9 +1,11 @@
-@media all and (min-width: 480px) {
+@media all {
     .pools{
         max-width: 60%;
         padding: 10px;
         margin-left: auto;
         margin-right: auto;
+        background-color: white;
+        border-radius:.5em;
     }
 
     .poolsTable{

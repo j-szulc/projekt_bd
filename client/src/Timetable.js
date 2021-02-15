@@ -8,6 +8,7 @@ import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Prev, Next} from './icons'
+import Spinner from 'react-bootstrap/Spinner'
 
 class Timetable extends Component {
 
@@ -25,13 +26,8 @@ class Timetable extends Component {
         this.state = {
             time: new Date(now.getFullYear(), now.getMonth(), now.getDate()),
             headers: [],
-            //headers: ["6:00", "6:15", "6:30", "6:45", "7:00", "7:15", "6:00", "6:15", "6:30", "6:45", "7:00", "7:15", "6:00", "6:15", "6:30", "6:45", "7:00", "7:15", "6:00", "6:15", "6:30", "6:45", "7:00", "7:15", "6:00", "6:15", "6:30", "6:45", "7:00", "7:15", "6:00", "6:15", "6:30", "6:45", "7:00", "7:15", "6:00", "6:15", "6:30", "6:45", "7:00", "7:15", "6:00", "6:15", "6:30", "6:45", "7:00", "7:15", "6:00", "6:15", "6:30", "6:45", "7:00", "7:15", "6:00", "6:15", "6:30", "6:45", "7:00", "7:15"],
-            //headers: ["6:00", "6:15", "6:30", "6:45", "7:00", "7:15"],
-            //data: [
-            //    [0, 2, null, 4, 5, 6],
-             //   [7, 8, 9, 10, 11, 12]
-            //],
             data: [],
+            waitForServer: true,
             selectedRow: undefined,
             selectedColumnStart: undefined,
             selectedColumnStop: undefined,
@@ -50,11 +46,10 @@ class Timetable extends Component {
             }
         }).then((res) => {
             const data = res.data;
-            console.log("Timetable:")
-            console.log(data);
-            this.setState({headers: data.headers, data: data.data});
+            this.setState({headers: data.headers, data: data.data, waitForServer:false});
         }).catch((err)=>{
-            this.setState({errorMsg:err});
+            console.log(error.response.data);
+            this.setState({errorMsg:JSON.stringify(err.response.data)});
         });
     }
 
@@ -63,7 +58,6 @@ class Timetable extends Component {
     }
 
     getClicked(rowIndex, columnIndex) {
-        console.log(this.state)
         let result = isDefined(rowIndex) && (rowIndex == this.state.selectedRow) && (this.state.selectedColumnStart <= columnIndex) && (columnIndex <= this.state.selectedColumnStop);
         return result;
     }
@@ -72,7 +66,7 @@ class Timetable extends Component {
         const errorFun = ((error)=>{
             console.log("Error!");
             console.log(error);
-            this.setState({errorMsg:error.message});
+            this.setState({errorMsg:error});
         }).bind(this);
 
         axios.post('/api/v1/reserve', {
@@ -88,7 +82,8 @@ class Timetable extends Component {
             changeRootState({page: "dashboard"});
             console.log(response);
         }).catch((error) =>{
-            errorFun(error);
+            console.log(error);
+            errorFun(JSON.stringify(error.response.data));
         });
     }
 
@@ -130,24 +125,32 @@ class Timetable extends Component {
     }
 
     changeTime(numOfDays) {
-        let newDate = (this.state.time.getDate()) + numOfDays;
-        console.log(newDate);
-        this.setState((prevState) => {
-            let copy = Object.assign({}, prevState);
-            copy.time.setDate(newDate);
-            copy.headers = [];
-            copy.data = [];
-            return copy;
-        })
-        this.resetSelection();
-        this.request();
+        let now = new Date();
+        let newTime = new Date(this.state.time);
+        let newDate = (newTime.getDate()) + numOfDays;
+        newTime.setDate(newDate);
+        if (newTime >= new Date(now.getFullYear(),now.getMonth(),now.getDate())) {
+            console.log(newDate);
+            this.setState((prevState) => {
+                let copy = Object.assign({}, prevState);
+                copy.time = newTime;
+                copy.headers = [];
+                copy.data = [];
+                copy.waitForServer = true;
+                return copy;
+            });
+            this.resetSelection();
+            this.request();
+        }
     }
 
 
     render() {
         checkCookies();
-        return <div className="zero">
+        return (
+        <div>
             <center>
+                <div className="timetableRootDiv">
                 <center>
                     <Prev onClick={((e) => this.changeTime(-1))}>Prev</Prev>
                     <div className="timetableHeaderDate">
@@ -155,9 +158,19 @@ class Timetable extends Component {
                     </div>
                     <Next onClick={((e) => this.changeTime(1))}>Next</Next>
                 </center>
+                {this.state.waitForServer ?
+                    <center>
+                        <tbody>
+                            <tr>
+                                <th colSpan="100%"><Spinner animation="border" role="status"/></th>
+                            </tr>
+                        </tbody>
+                    </center> : <div/>
+                }
                 <div className="flipper zero">
                     <div className="div zero">
                         <div className="flipper zero inline">
+
                             <Table bordered size="sm" className="timetable table-responsive zero inline">
                                 <thead>
                                     <tr>
@@ -189,8 +202,11 @@ class Timetable extends Component {
                 <Button onClick={(e) => this.makeReservation()} disabled={!this.valid()} className="rightButton">
                     Reserve
                 </Button>
+                </div>
+
             </center>
-        </div>
+            </div>
+        );
     }
 
 
