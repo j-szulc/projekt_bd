@@ -62,12 +62,12 @@ class Dashboard extends Component {
                 <thead>
                     <tr>
                         <th className="id">Id</th>
-                        <th className="name=">Nazwa</th>
-                        <th className="address">Adres</th>
-                        <th className="nrtoru">Nr toru</th>
-                        <th className="date">Data</th>
-                        <th className="from">Od</th>
-                        <th className="to">Do</th>
+                        <th className="name=">Name</th>
+                        <th className="address">Adress</th>
+                        <th className="nrtoru">Pool lane no.</th>
+                        <th className="date">Date</th>
+                        <th className="from">From</th>
+                        <th className="to">To</th>
                     </tr>
                 </thead>
                 {this.state.waitForServer ?
@@ -81,7 +81,7 @@ class Dashboard extends Component {
                     : (this.state.rows.length == 0 ?
                             (<tbody>
                                     <tr>
-                                        <th colSpan="100%">Nie masz żadnych rezerwacji</th>
+                                        <th colSpan="100%">You have no upcoming reservations</th>
                                     </tr>
                                 </tbody>
                             )

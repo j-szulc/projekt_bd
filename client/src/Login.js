@@ -133,7 +133,7 @@ class Login extends Component {
                                 />
                             </Form.Group>
                             <Form.Group size="lg" controlId="name">
-                                <Form.Label>Imię</Form.Label>
+                                <Form.Label>First name</Form.Label>
                                 <Form.Control
                                     autoFocus
                                     type="text"
@@ -142,7 +142,7 @@ class Login extends Component {
                                 />
                             </Form.Group>
                             <Form.Group size="lg" controlId="surname">
-                                <Form.Label>Nazwisko</Form.Label>
+                                <Form.Label>Last name</Form.Label>
                                 <Form.Control
                                     autoFocus
                                     type="text"
@@ -160,7 +160,7 @@ class Login extends Component {
                             </Form.Group>
                             <Form.Group controlId="tel">
                                 <PhoneInput
-                                    placeholder="Wprowadź nr telefonu"
+                                    placeholder="Enter your phone number"
                                     defaultCountry="PL"
                                     value={this.state.tel}
                                     onChange={(e) => {
@@ -168,10 +168,10 @@ class Login extends Component {
                                     }}/>
                             </Form.Group>
                             <Form.Group controlId="level">
-                                <Form.Label>Poziom zaawansowania</Form.Label>
-                                <Form.Control as="select" defaultValue="Wybierz"
+                                <Form.Label>Level</Form.Label>
+                                <Form.Control as="select" defaultValue="Choose"
                                               onChange={(e) => this.setState({level: e.target.value})}>
-                                    <option>Wybierz</option>
+                                    <option>Choose</option>
                                     <option>beginner</option>
                                     <option>intermediate</option>
                                     <option>advanced</option>

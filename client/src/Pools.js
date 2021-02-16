@@ -34,13 +34,14 @@ class Pools extends Component {
     render() {
         checkCookies();
         return <div className="pools">
+            <h1>Available pools</h1>
             <div className="error">{this.state.errorMsg}</div>
             <Table bordered className="poolsTable">
                 <thead>
                     <tr>
                         <th className="id">Id</th>
-                        <th className="name">Nazwa</th>
-                        <th className="address">Adres</th>
+                        <th className="name">Name</th>
+                        <th className="address">Adress</th>
                     </tr>
                 </thead>
                 {this.state.errorMsg}

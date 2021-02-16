@@ -9,7 +9,8 @@
     }
 
     .poolsTable{
-        table-layout: fixed
+        table-layout: fixed;
+        overflow-x: scroll;
     }
 
     .poolsRow:hover{
