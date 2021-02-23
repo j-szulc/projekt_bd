@@ -1,5 +1,7 @@
-# Vision doc: System rezerwacji torów na basenach
+# System rezerwacji torów na basenach
 System stworzony z myślą o wymagających użytkownikach pływalni krytych na terenie Warszawy. Dzięki rezerwacji torów w zależności od poziomu zaawansowania pomaga wykorzystać czas na basenie w sposób efektywny i komfortowy. Oczywiście z uwzględnieniem aktualnych zaleceń sanitarnych.
+## Demo:
+Opublikowane na [heroku](https://polar-savannah-57296.herokuapp.com/)
 ## Funkcjonalności:
 1. Użytkownicy:
     - wybór basenu w ramach miasta stołecznego Warszawy
